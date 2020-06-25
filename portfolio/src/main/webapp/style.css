@@ -2,30 +2,40 @@
   text-align:center;
 }
 
-#socialmedia {
-  display: flex; 
-  flex-direction: column;
+#git{
+  text-align:center;
 }
+
+/*
+.row {
+  text-align:center;
+  display: flex;
+}
+
+.column {
+  text-align:center;
+  flex: 50%;
+  padding: 5px;
+}
+*/
 
 #clickBttn {
   font-family: Comic Sans MS, cursive, sans-serif;
-}
-
-
-
-
-
-#myimage {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
+  text-align:center;
 }
 
 #content {
   margin-left: auto;
   margin-right: auto;
   width: 650px;
+  font-family: Trebuchet MS, Helvetica, sans-serif;
+}
+
+#myimage {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
 }
 
 #txt {
