@@ -1,9 +1,42 @@
+#info {
+  text-align:center;
+}
+
+#socialmedia {
+  display: flex; 
+  flex-direction: column;
+}
+
+#clickBttn {
+  font-family: Comic Sans MS, cursive, sans-serif;
+}
+
+
+
+
+
+#myimage {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
 #content {
   margin-left: auto;
   margin-right: auto;
   width: 650px;
 }
 
+#txt {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 #greeting-container {
   margin-top: 20px;
 }
+
+
+
+
