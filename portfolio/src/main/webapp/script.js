@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
+ * Adds a random fact to the page.
  */
 function addRandomFact() {
   const facts = ["My Google Drive contains over 22TB of files",
@@ -55,24 +55,12 @@ function handleResponse(response) {
   textPromise.then(addNameToDom);
 }
 
-/** Adds a random quote to the DOM. */
+/** Adds name to the DOM. */
 function addNameToDom(name) {
   console.log('Adding name to dom: ' + name);
 
   const nameContainer = document.getElementById('name-container');
   nameContainer.innerText = name;
-}
-
-/**
- * The above code is organized to show each individual step, but we can use an
- * ES6 feature called arrow functions to shorten the code. This function
- * combines all of the above code into a single Promise chain. You can use
- * whichever syntax makes the most sense to you.
- */
-function getRandomQuoteUsingArrowFunctions() {
-  fetch('/random-quote').then(response => response.text()).then((quote) => {
-    document.getElementById('name-container').innerText = quote;
-  });
 }
 
 
