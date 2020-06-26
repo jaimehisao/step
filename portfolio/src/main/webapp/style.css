@@ -10,19 +10,6 @@
   text-align:center;
 }
 
-/*
-.row {
-  text-align:center;
-  display: flex;
-}
-
-.column {
-  text-align:center;
-  flex: 50%;
-  padding: 5px;
-}
-*/
-
 #clickBttn {
   font-family: Comic Sans MS, cursive, sans-serif;
   text-align:center;
