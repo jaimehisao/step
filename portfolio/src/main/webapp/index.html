@@ -1,18 +1,79 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>My Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
-  </head>
-  <body>
-    <div id="content">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Hisao's Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <div id="content">
+    <!--Header & Basics-->
+    <div id="info">
       <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
+      <h1>Jaime Hisao Yesaki Hinojosa</h1>
     </div>
-  </body>
+    <!--Image of Myself-->
+    <div class="imgwrapper">
+      <div class="imgcontainer" id="myimage">
+        <a href="https://www.instagram.com/jaimehisao" target="_blank"><img class="imglink" src="/images/hisao2.jpg"
+            alt="Hisao and Ely" width="300" height="400"></img></a>
+      </div>
+      <!--Dev Social Media Icons & Links-->
+      <div class="row">
+        <div class="column">
+        </div>
+        <div class="imgwrapper" id="git">
+          <div class="imgcontainer">
+            <a href="https://www.github.com/jaimehisao" target="_blank"><img class="imglink" src="/images/octocat.svg"
+                alt="El Logo de Github" width="40" height="70"></img></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="txt">
+      <h2>About me: </h2>
+      <p>
+        I'm a rising CS sophomore at Tec de Monterrey in Mexico.
+        I am passionate about servers, databases, DevOps and always
+        learning new stuff and being on the cutting edge of technology.
+      </p>
+      <!--Resume/Experience-->
+      <h2>Work Experience</h2>
+      <ul>
+        <li>FIRST Robotics Mentor at PrepaTec (November 2019 - Present) </li>
+        <li>IT Intern at Sigma Alimentos (Winter 2018)</li>
+        <li>IT Intern at Sigma Alimentos (Summer 2018)</li>
+      </ul>
+      <h2>Projects I've worked on:</h2>
+      <ul>
+        <li>Treeler, Visual recognition for tree planting, with a social media twist!</li>
+        <li>CaneAssist, AI assisted smart cane with voice assistant. (HackMIT 2019) </li>
+        <li>EXO-AID, extra set of mechanical arms controllable from anywhere in the world (HackMTY 2019) </li>
+        <li>DLC (Dynamic Logic Controller), Videogame controller addon for VR that simulates the weight and feel of
+          objects in game. (HackMTY 2018) </li>
+        <li>Braillearn, a tool to bring braile alphabet to the masses. (HackPrepas 2017) </li>
+      </ul>
+      <h2>Awards:</h2>
+      <ul>
+        <li>6th at HackTX - Treeler Project</li>
+        <li>2nd Place on IBM Visual Recognition Challenge at HackMIT 2019, CaneAssist</li>
+        <li>2nd Place on HackMTY 2019 (Mexico's Largest Student Hackathon), EXO-AID</li>
+        <li>1st Place on HackMTY 2018 (Mexico's Largest Student Hackathon), DLC</li>
+        <li>2nd place at WER Robotics Competition, 2017</li>
+        <li>1st Place on HackPrepas 2017 (HighSchool Hackathon), Braillearn</li>
+      </ul>
+      <br>
+    </div>
+    <!--The BUTTON--->
+    <div id="clickBttn">
+      <p>Click here to get a random fact about me!:</p>
+      <button onclick="addRandomFact()">Click!</button>
+    </div>
+    <div id="fact-container"></div>
+  </div>
+</body>
+
 </html>

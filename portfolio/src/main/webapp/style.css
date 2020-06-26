@@ -1,9 +1,43 @@
+#info {
+  text-align:center;
+}
+
+#git{
+  text-align:center;
+}
+
+#fact-container {
+  text-align:center;
+}
+
+#clickBttn {
+  font-family: Comic Sans MS, cursive, sans-serif;
+  text-align:center;
+}
+
 #content {
   margin-left: auto;
   margin-right: auto;
   width: 650px;
+  font-family: Trebuchet MS, Helvetica, sans-serif;
+}
+
+#myimage {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+#txt {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #greeting-container {
   margin-top: 20px;
 }
+
+
+
+
