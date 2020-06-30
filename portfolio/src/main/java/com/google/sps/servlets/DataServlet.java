@@ -17,10 +17,18 @@ package com.google.sps.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Entity;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/comments")
@@ -28,10 +36,23 @@ public class DataServlet extends HttpServlet {
 
   private DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
 
+  @Override
+  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    resp.setContentType("application/json");
+    String text = req.getParameter("comment");
+  }
+
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html;");
+    response.setContentType("application/html;");
+
+    Query query = new Query("Comments").addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = dataStore.prepare(query);
+
+    for(Entity entity : results.asIterable()){
+      System.out.println(entity.getProperties());
+    }
 
   }
 }
