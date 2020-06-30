@@ -12,10 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/*************************
+ *     RANDOM FACT 
+ ************************/
+
 /**
  * Adds a random fact to the page.
  */
-function addRandomFact() {
+function randomFact() {
   const facts = ["My Google Drive contains over 22TB of files",
    "I'm currently watching The Office for the third time",
     "I have a turtle as a pet but I haven't seen it in a week"];
@@ -28,39 +32,44 @@ function addRandomFact() {
   factContainer.innerText = fact;
 }
 
-function getName(){
-  console.log('Fetching name!');
+/*************************
+ *     Greeting
+ ************************/
+function greetingMaker() {
+  const greetings = ["Bonjour!","Ahoj!","Hola!","Hello!","Guten Tag!", "Yasou!"];
 
-  // The fetch() function returns a Promise because the request is asynchronous.
-  const responsePromise = fetch('/data');
+  // Pick a random greeting.
+  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
 
-  // When the request is complete, pass the response into handleResponse().
-  responsePromise.then(handleResponse);
+  // Add it to the page.
+  const greetingContainer = document.getElementById('greeting-container');
+  greetingContainer.innerText = greeting;
 }
 
 
-/**
- * Handles response by converting it to text and passing the result to
- * addQuoteToDom().
- */
-function handleResponse(response) {
-  console.log('Handling the response.');
+/*************************
+ *   COMMENTS SECTION 
+ ************************/
 
-  // response.text() returns a Promise, because the response is a stream of
-  // content and not a simple variable.
-  const textPromise = response.text();
+ function comments(){
 
-  // When the response is converted to text, pass the result into the
-  // addQuoteToDom() function.
-  textPromise.then(addNameToDom);
-}
+ }
 
-/** Adds name to the DOM. */
-function addNameToDom(name) {
-  console.log('Adding name to dom: ' + name);
+ function deleteMessage(){
 
-  const nameContainer = document.getElementById('name-container');
-  nameContainer.innerText = name;
-}
+ }
+
+ function validateComment(){
+   
+ }
+
+
+
+ /**
+  * Funtions that run on page load
+  */
+ function onPageLoad(){
+
+ }
 
 

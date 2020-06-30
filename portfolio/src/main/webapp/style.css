@@ -8,6 +8,12 @@
 
 #fact-container {
   text-align:center;
+  font-family: Trebuchet MS, Helvetica, sans-serif;
+}
+
+#greeting-container {
+  text-align:center;
+  font-family: Trebuchet MS, Helvetica, sans-serif;
 }
 
 #clickBttn {
