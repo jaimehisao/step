@@ -35,6 +35,7 @@ import com.google.appengine.api.datastore.Entity;
 public class DataServlet extends HttpServlet {
 
   private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  private Comment comment;
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -44,7 +45,7 @@ public class DataServlet extends HttpServlet {
 
     String name = null;
     String commentText = null;
-    int timestamp = 0;
+    long timestamp = System.currentTimeMillis();
     commentEntity.setProperty("name", name);
     commentEntity.setProperty("comment", commentText);
     commentEntity.setProperty("timestamp", timestamp);
@@ -52,6 +53,8 @@ public class DataServlet extends HttpServlet {
     commentEntity.setProperty("downvotes", 0);
 
     datastore.put(commentEntity);
+
+    resp.sendRedirect("/index.html");
   }
 
 
@@ -59,11 +62,13 @@ public class DataServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/html;");
 
+    ArrayList<Comment> recievedComments = new ArrayList<>();
     Query query = new Query("Comments").addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     for(Entity entity : results.asIterable()){
-      System.out.println(entity.getProperties());
+      System.out.println(entity.getProperties()); //Debug output
+      recievedComments.add(new Comment(entity));
     }
 
   }
