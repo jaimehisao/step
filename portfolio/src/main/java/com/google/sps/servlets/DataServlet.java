@@ -38,20 +38,29 @@ public class DataServlet extends HttpServlet {
   private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   private Comment comment;
 
+  private String datastoreName = "Comments";
+
+  private String nameProperty = "name";
+  private String commentProperty = "comment";
+  private String timestampProperty = "timestamp";
+  private String upvotesProperty = "upvotes";
+  private String downvotesProperty = "downvotes";
+
+
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     resp.setContentType("application/json");
     
-    Entity commentEntity = new Entity("Comment");
+    Entity commentEntity = new Entity(datastoreName);
 
     String name = null;
     String commentText = null;
     long timestamp = System.currentTimeMillis();
-    commentEntity.setProperty("name", name);
-    commentEntity.setProperty("comment", commentText);
-    commentEntity.setProperty("timestamp", timestamp);
-    commentEntity.setProperty("upvotes", 0);
-    commentEntity.setProperty("downvotes", 0);
+    commentEntity.setProperty(nameProperty, name);
+    commentEntity.setProperty(commentProperty, commentText);
+    commentEntity.setProperty(timestampProperty, timestamp);
+    commentEntity.setProperty(upvotesProperty, 0);
+    commentEntity.setProperty(downvotesProperty, 0);
 
     datastore.put(commentEntity);
 
@@ -64,7 +73,7 @@ public class DataServlet extends HttpServlet {
     response.setContentType("application/html;");
 
     ArrayList<Comment> recievedComments = new ArrayList<>();
-    Query query = new Query("Comments").addSort("timestamp", SortDirection.DESCENDING);
+    Query query = new Query(datastoreName).addSort(timestampProperty, SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     for(Entity entity : results.asIterable()){
