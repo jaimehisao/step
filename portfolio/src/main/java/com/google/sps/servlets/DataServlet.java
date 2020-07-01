@@ -34,12 +34,24 @@ import com.google.appengine.api.datastore.Entity;
 @WebServlet("/comments")
 public class DataServlet extends HttpServlet {
 
-  private DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
+  private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     resp.setContentType("application/json");
-    String text = req.getParameter("comment");
+    
+    Entity commentEntity = new Entity("Comment");
+
+    String name = null;
+    String commentText = null;
+    int timestamp = 0;
+    commentEntity.setProperty("name", name);
+    commentEntity.setProperty("comment", commentText);
+    commentEntity.setProperty("timestamp", timestamp);
+    commentEntity.setProperty("upvotes", 0);
+    commentEntity.setProperty("downvotes", 0);
+
+    datastore.put(commentEntity);
   }
 
 
@@ -48,7 +60,7 @@ public class DataServlet extends HttpServlet {
     response.setContentType("application/html;");
 
     Query query = new Query("Comments").addSort("timestamp", SortDirection.DESCENDING);
-    PreparedQuery results = dataStore.prepare(query);
+    PreparedQuery results = datastore.prepare(query);
 
     for(Entity entity : results.asIterable()){
       System.out.println(entity.getProperties());

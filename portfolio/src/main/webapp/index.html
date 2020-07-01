@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Hisao's Portfolio</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css">
   <script src="script.js"></script>
 </head>
@@ -18,14 +19,14 @@
 
     <div id="clickBttn">
       <p>Click here for a greeting!:</p>
-      <button onclick="greetingMaker()">Click here for a greeting!</button>
+      <button type="submit" class="btn btn-primary mb-2" onclick="greetingMaker()">Click here for a greeting!</button>
     </div>
     <div id="greeting-container"></div>
 
     <!--Greeting BUTTON--->
     <div id="clickBttn">
       <p>Click here to get a random fact about me!:</p>
-      <button id=greetingButton onclick="randomFact()">Click Here for a random fact!</button>
+      <button id=greetingButton type="submit" class="btn btn-primary mb-2" onclick="randomFact()">Click Here for a random fact!</button>
     </div>
     <div id="fact-container"></div>
 
@@ -89,10 +90,25 @@
     
   
     <!--Comments Section-->
-    <div>
+    <div id="comments-section">
       <h2>Comments Section</h2>
       <p>Feel free to leave a comment here!</p>
+      <!--Submit Comment-->
+      <form>
+        <div class="form-group">
+          <label for="commentNameArea">Name</label>
+          <input type="email" class="form-control" id="commentNameArea" placeholder="Sundar">
+        </div>
+        <div class="form-group">
+          <label for="commentTextArea">Comment</label>
+          <textarea class="form-control" id="commentTextArea" rows="2" placeholder="Very funny comment goes here..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Submit Comment</button>
+      </form>
 
+
+      
+    
     </div>
   </div>
 </body>
