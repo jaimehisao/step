@@ -47,29 +47,3 @@ function greetingMaker() {
 }
 
 
-/*************************
- *   COMMENTS SECTION 
- ************************/
-
- function comments(){
-
- }
-
- function deleteMessage(){
-
- }
-
- function validateComment(){
-   
- }
-
-
-
- /**
-  * Funtions that run on page load
-  */
- function onPageLoad(){
-
- }
-
-

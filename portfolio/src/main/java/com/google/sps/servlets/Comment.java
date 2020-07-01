@@ -10,7 +10,7 @@ public class Comment {
     private int downvotes;
     private long key;
 
-    //Constructor to use when comment is created
+    // Constructor to use when comment is created
     public Comment(String text, String user, long timestamp){
         this.text = text;
         this.user = user;
@@ -19,7 +19,7 @@ public class Comment {
         this.downvotes = 0;
     }
 
-    //Constructor to use when comment is imported from Datastore
+    // Constructor to use when comment is imported from Datastore
     public Comment(Entity entity){
         this.key = entity.getKey().getId();
         this.text = (String)entity.getProperty("text");
@@ -75,21 +75,6 @@ public class Comment {
 
     public void setKey(long key) {
         this.key = key;
-    }
-
-    public Comment upvotes(int upvotes) {
-        this.upvotes = upvotes;
-        return this;
-    }
-
-    public Comment downvotes(int downvotes) {
-        this.downvotes = downvotes;
-        return this;
-    }
-
-    public Comment key(long key) {
-        this.key = key;
-        return this;
     }
 
 }

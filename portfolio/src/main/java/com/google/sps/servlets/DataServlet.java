@@ -27,6 +27,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.gson.Gson;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Entity;
 
@@ -69,7 +70,12 @@ public class DataServlet extends HttpServlet {
     for(Entity entity : results.asIterable()){
       System.out.println(entity.getProperties()); //Debug output
       recievedComments.add(new Comment(entity));
+
     }
+
+    Gson gson = new Gson();
+    String jsonComments = gson.toJson(recievedComments);
+    response.getWriter().println(jsonComments);
 
   }
 }
