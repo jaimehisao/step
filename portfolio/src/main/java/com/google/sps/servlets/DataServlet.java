@@ -38,13 +38,15 @@ public class DataServlet extends HttpServlet {
   private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   private Comment comment;
 
-  private String datastoreName = "Comments";
+  private final String datastoreName = "Comments";
 
-  private String nameProperty = "name";
-  private String commentProperty = "comment";
-  private String timestampProperty = "timestamp";
-  private String upvotesProperty = "upvotes";
-  private String downvotesProperty = "downvotes";
+  private final String nameProperty = "name";
+  private final String commentProperty = "comment";
+  private final String timestampProperty = "timestamp";
+  private final String upvotesProperty = "upvotes";
+  private final String downvotesProperty = "downvotes";
+
+  private final String idProperty = "id";
 
 
   @Override
@@ -85,6 +87,22 @@ public class DataServlet extends HttpServlet {
     Gson gson = new Gson();
     String jsonComments = gson.toJson(receivedComments);
     response.getWriter().println(jsonComments);
+  }
 
+  @Override 
+  public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    response.setContentType("application/json");
+
+    try{
+      // Get key from request header
+      Key key = KeyFactory.createKey(datastoreName, Long.parseLong(request.getHeader(idProperty)));
+      datastore.delete(key);
+    }catch(Exception exception){
+      System.out.println("Error when deleting comment!");
+      // Print error stacktrace - optional
+      System.out.println(exception);
+    }
+
+    response.sendRedirect("/index.html"); // Redirect user to main page after comment.
   }
 }
