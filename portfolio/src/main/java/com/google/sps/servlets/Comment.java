@@ -6,8 +6,8 @@ public class Comment {
     private final String text;
     private final String user;
     private final long timestamp;
-    private final int upvotes;
-    private final int downvotes;
+    private int upvotes;
+    private int downvotes;
     private final long key;
 
     // Constructor to use when comment is created
@@ -69,9 +69,4 @@ public class Comment {
     public long getKey() {
         return this.key;
     }
-
-    public void setKey(long key) {
-        this.key = key;
-    }
-
 }
