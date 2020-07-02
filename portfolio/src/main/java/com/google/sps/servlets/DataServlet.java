@@ -72,18 +72,18 @@ public class DataServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/html;");
 
-    ArrayList<Comment> recievedComments = new ArrayList<>();
+    ArrayList<Comment> receivedComments = new ArrayList<>();
     Query query = new Query(datastoreName).addSort(timestampProperty, SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     for(Entity entity : results.asIterable()){
       System.out.println(entity.getProperties()); //Debug output
-      recievedComments.add(new Comment(entity));
+      receivedComments.add(new Comment(entity));
 
     }
 
     Gson gson = new Gson();
-    String jsonComments = gson.toJson(recievedComments);
+    String jsonComments = gson.toJson(receivedComments);
     response.getWriter().println(jsonComments);
 
   }
