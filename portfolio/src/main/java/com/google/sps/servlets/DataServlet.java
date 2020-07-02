@@ -75,13 +75,13 @@ public class DataServlet extends HttpServlet {
     response.setContentType("application/html;");
 
     ArrayList<Comment> receivedComments = new ArrayList<>();
-    Query query = new Query(datastoreName).addSort(timestampProperty, SortDirection.DESCENDING);
+    //TODO: Change to sort by up/down vote when that is implemented.
+    Query query = new Query(datastoreName).addSort(timestampProperty, SortDirection.DESCENDING); 
     PreparedQuery results = datastore.prepare(query);
 
     for(Entity entity : results.asIterable()){
       System.out.println(entity.getProperties()); //Debug output
       receivedComments.add(new Comment(entity));
-
     }
 
     Gson gson = new Gson();
@@ -105,4 +105,5 @@ public class DataServlet extends HttpServlet {
 
     response.sendRedirect("/index.html"); // Redirect user to main page after comment.
   }
+
 }
