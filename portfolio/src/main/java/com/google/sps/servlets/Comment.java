@@ -6,9 +6,9 @@ public class Comment {
     private final String text;
     private final String user;
     private final long timestamp;
-    private int upvotes;
-    private int downvotes;
-    private long key;
+    private final int upvotes;
+    private final int downvotes;
+    private final long key;
 
     // Constructor to use when comment is created
     public Comment(String text, String user, long timestamp){
