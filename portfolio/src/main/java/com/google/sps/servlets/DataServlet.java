@@ -30,33 +30,35 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/comments")
 public class DataServlet extends HttpServlet {
 
-  private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   private Comment comment;
 
-  private final String datastoreName = "Comments";
+  private final String ENTITY_NAME = "Comments";
 
-  private final String nameProperty = "name";
-  private final String commentProperty = "comment";
-  private final String timestampProperty = "timestamp";
-  private final String upvotesProperty = "upvotes";
-  private final String downvotesProperty = "downvotes";
+  private final String NAME_PROPERTY = "name";
+  private final String COMMENT_PROPERTY = "comment";
+  private final String TIMESTAMP_PROPERTY = "timestamp";
+  private final String UPVOTES_PROPERTY = "upvotes";
+  private final String DOWNVOTES_PROPERTY = "downvotes";
 
-  private final String idProperty = "id";
+  private final String ID_PROPERTY = "id";
 
 
   @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    resp.setContentType("application/json");
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    response.setContentType("application/json");
     
-    Entity commentEntity = new Entity(datastoreName);
+    
+    Entity commentEntity = new Entity(entityName);
 
-    String name = null;
-    String commentText = null;
+    String name = request.getParameter("name");
+    String commentText = request.getParameter("comment");
     long timestamp = System.currentTimeMillis();
     commentEntity.setProperty(nameProperty, name);
     commentEntity.setProperty(commentProperty, commentText);
@@ -64,19 +66,23 @@ public class DataServlet extends HttpServlet {
     commentEntity.setProperty(upvotesProperty, 0);
     commentEntity.setProperty(downvotesProperty, 0);
 
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
 
-    resp.sendRedirect("/index.html");
+    System.out.println("Added comment to datastore with " + name + " " + commentText + " on " + timestamp);
+
+    response.sendRedirect("/index.html");
   }
 
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/html;");
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     ArrayList<Comment> receivedComments = new ArrayList<>();
     //TODO: Change to sort by up/down vote when that is implemented.
-    Query query = new Query(datastoreName).addSort(timestampProperty, SortDirection.DESCENDING); 
+    Query query = new Query(entityName).addSort(timestampProperty, SortDirection.DESCENDING); 
     PreparedQuery results = datastore.prepare(query);
 
     for(Entity entity : results.asIterable()){
@@ -92,10 +98,10 @@ public class DataServlet extends HttpServlet {
   @Override 
   public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException{
     response.setContentType("application/json");
-
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     try{
       // Get key from request header
-      Key key = KeyFactory.createKey(datastoreName, Long.parseLong(request.getHeader(idProperty)));
+      Key key = KeyFactory.createKey(entityName, Long.parseLong(request.getHeader(idProperty)));
       datastore.delete(key);
     }catch(Exception exception){
       System.out.println("Error when deleting comment!");
