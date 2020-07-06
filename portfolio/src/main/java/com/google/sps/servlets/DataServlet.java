@@ -55,16 +55,16 @@ public class DataServlet extends HttpServlet {
     response.setContentType("application/json");
     
     
-    Entity commentEntity = new Entity(entityName);
+    Entity commentEntity = new Entity(ENTITY_NAME);
 
     String name = request.getParameter("name");
     String commentText = request.getParameter("comment");
     long timestamp = System.currentTimeMillis();
-    commentEntity.setProperty(nameProperty, name);
-    commentEntity.setProperty(commentProperty, commentText);
-    commentEntity.setProperty(timestampProperty, timestamp);
-    commentEntity.setProperty(upvotesProperty, 0);
-    commentEntity.setProperty(downvotesProperty, 0);
+    commentEntity.setProperty(NAME_PROPERTY, name);
+    commentEntity.setProperty(COMMENT_PROPERTY, commentText);
+    commentEntity.setProperty(TIMESTAMP_PROPERTY, timestamp);
+    commentEntity.setProperty(UPVOTES_PROPERTY, 0);
+    commentEntity.setProperty(DOWNVOTES_PROPERTY, 0);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
@@ -82,7 +82,7 @@ public class DataServlet extends HttpServlet {
 
     ArrayList<Comment> receivedComments = new ArrayList<>();
     //TODO: Change to sort by up/down vote when that is implemented.
-    Query query = new Query(entityName).addSort(timestampProperty, SortDirection.DESCENDING); 
+    Query query = new Query(ENTITY_NAME).addSort(TIMESTAMP_PROPERTY, SortDirection.DESCENDING); 
     PreparedQuery results = datastore.prepare(query);
 
     for(Entity entity : results.asIterable()){
@@ -101,7 +101,7 @@ public class DataServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     try{
       // Get key from request header
-      Key key = KeyFactory.createKey(entityName, Long.parseLong(request.getHeader(idProperty)));
+      Key key = KeyFactory.createKey(ENTITY_NAME, Long.parseLong(request.getHeader(ID_PROPERTY)));
       datastore.delete(key);
     }catch(Exception exception){
       System.out.println("Error when deleting comment!");
