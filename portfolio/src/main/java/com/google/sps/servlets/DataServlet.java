@@ -39,15 +39,15 @@ public class DataServlet extends HttpServlet {
 
   private Comment comment;
 
-  private final String ENTITY_NAME = "Comments";
+  private final static String ENTITY_NAME = "Comments";
 
-  private final String NAME_PROPERTY = "name";
-  private final String COMMENT_PROPERTY = "comment";
-  private final String TIMESTAMP_PROPERTY = "timestamp";
-  private final String UPVOTES_PROPERTY = "upvotes";
-  private final String DOWNVOTES_PROPERTY = "downvotes";
+  private final static String NAME_PROPERTY = "name";
+  private final static String COMMENT_PROPERTY = "comment";
+  private final static String TIMESTAMP_PROPERTY = "timestamp";
+  private final static String UPVOTES_PROPERTY = "upvotes";
+  private final static String DOWNVOTES_PROPERTY = "downvotes";
 
-  private final String ID_PROPERTY = "id";
+  private final static String ID_PROPERTY = "id";
 
 
   @Override
