@@ -33,9 +33,13 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+import java.util.logging.Logger;
+
+
 @WebServlet("/comments")
 public class DataServlet extends HttpServlet {
+
+  private static final Logger log = Logger.getLogger(DataServlet.class.getName());
 
   private Comment comment;
 
@@ -49,11 +53,12 @@ public class DataServlet extends HttpServlet {
 
   private final static String ID_PROPERTY = "id";
 
+  private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     response.setContentType("application/json");
-    
     
     Entity commentEntity = new Entity(ENTITY_NAME);
 
@@ -69,7 +74,7 @@ public class DataServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
 
-    System.out.println("Added comment to datastore with " + name + " " + commentText + " on " + timestamp);
+    log.info("Added comment to datastore with " + name + " " + commentText + " on " + timestamp);
 
     response.sendRedirect("/index.html");
   }
@@ -78,7 +83,6 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json;");
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     ArrayList<Comment> receivedComments = new ArrayList<>();
     //TODO: Change to sort by up/down vote when that is implemented.
@@ -86,29 +90,22 @@ public class DataServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     for(Entity entity : results.asIterable()){
-      System.out.println("Got comment from datastore with properties: " + entity.getProperties()); //Debug output
+      log.info("Got comment from datastore with properties: " + entity.getProperties()); //Debug output
       receivedComments.add(new Comment(entity));
     }
 
     Gson gson = new Gson();
     String jsonComments = gson.toJson(receivedComments);
-    System.out.println(jsonComments);
     response.getWriter().println(jsonComments);
   }
 
   @Override 
   public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException{
     response.setContentType("application/json");
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    try{
-      // Get key from request header
-      Key key = KeyFactory.createKey(ENTITY_NAME, Long.parseLong(request.getHeader(ID_PROPERTY)));
-      datastore.delete(key);
-    }catch(Exception exception){
-      System.out.println("Error when deleting comment!");
-      // Print error stacktrace - optional
-      System.out.println(exception);
-    }
+
+    Key key = KeyFactory.createKey(ENTITY_NAME, Long.parseLong(request.getHeader(ID_PROPERTY)));
+    datastore.delete(key);
+
     response.sendRedirect("/index.html"); // Redirect user to main page after comment.
   }
 

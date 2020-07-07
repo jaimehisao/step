@@ -20,7 +20,7 @@ public class Comment {
         this(
             (String)entity.getProperty("comment"), 
             (String)entity.getProperty("name"), 
-            (long)entity.getProperty("timestamp"), 
+            (long)entity.getProperty("timestamp"),
             ((Long)entity.getProperty("upvotes")).intValue(), 
             ((Long)entity.getProperty("downvotes")).intValue() ,
             entity.getKey().getId());

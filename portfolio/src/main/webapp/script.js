@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const MAX_COMMENTS = 100;
-
 /*************************
  *     RANDOM FACT 
  ************************/
@@ -51,13 +49,6 @@ function greetingMaker() {
 /*************************
  *     Comments
  ************************/
-async function queryComments(){
-  const query = await fetch("/comment");
-  const jsonResponse = await Response.json();
-
-  // Insert comments to HTML
-}
-
 function covertCommentsToJSON(){
   const comments = document.getElementById("comments");
   const tmp = document.getElementById("comment-template");
