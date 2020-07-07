@@ -77,7 +77,7 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("application/html;");
+    response.setContentType("application/json;");
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     ArrayList<Comment> receivedComments = new ArrayList<>();
@@ -86,12 +86,13 @@ public class DataServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     for(Entity entity : results.asIterable()){
-      System.out.println(entity.getProperties()); //Debug output
+      System.out.println("Got comment from datastore with properties: " + entity.getProperties()); //Debug output
       receivedComments.add(new Comment(entity));
     }
 
     Gson gson = new Gson();
     String jsonComments = gson.toJson(receivedComments);
+    System.out.println(jsonComments);
     response.getWriter().println(jsonComments);
   }
 
@@ -108,7 +109,6 @@ public class DataServlet extends HttpServlet {
       // Print error stacktrace - optional
       System.out.println(exception);
     }
-
     response.sendRedirect("/index.html"); // Redirect user to main page after comment.
   }
 

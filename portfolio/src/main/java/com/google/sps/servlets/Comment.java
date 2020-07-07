@@ -18,11 +18,11 @@ public class Comment {
     // Constructor to use when comment is imported from Datastore
     public Comment(Entity entity){
         this(
-            (String)entity.getProperty("text"), 
-            (String)entity.getProperty("user"), 
+            (String)entity.getProperty("comment"), 
+            (String)entity.getProperty("name"), 
             (long)entity.getProperty("timestamp"), 
-            (Integer)entity.getProperty("upvotes"), 
-            (Integer)entity.getProperty("downvotes") ,
+            ((Long)entity.getProperty("upvotes")).intValue(), 
+            ((Long)entity.getProperty("downvotes")).intValue() ,
             entity.getKey().getId());
     }
 

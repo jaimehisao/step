@@ -23,15 +23,17 @@ const MAX_COMMENTS = 100;
  */
 function randomFact() {
   const facts = ["My Google Drive contains over 22TB of files",
-   "I'm currently watching The Office for the third time",
-    "I have a turtle as a pet but I haven't seen it in a week"];
+  "I'm currently watching The Office for the third time",
+  "I have a turtle as a pet but I haven't seen it in a week",
+  "Sometimes I worry about the amount of computers that I have.",
+  "I low key hoard electronics and then regret not selling them when they were worth something",
+  "My mom thinks my CS Degree (in progress) gives me magical Facebook powers.",
+  "As a CS student I've been asked if I can hack a Facebook account more than about algorithms."];
 
-  // Pick a random greeting.
-  const fact = facts[Math.floor(Math.random() * facts.length)];
+  const fact = facts[Math.floor(Math.random() * facts.length)]; // Pick a random fact.
 
-  // Add it to the page.
-  const factContainer = document.getElementById('fact-container');
-  factContainer.innerText = fact;
+  const factContainer = document.getElementById('fact-container');  
+  factContainer.innerText = fact; // Add it to the page.
 }
 
 /*************************
@@ -40,27 +42,96 @@ function randomFact() {
 function greetingMaker() {
   const greetings = ["Bonjour!","Ahoj!","Hola!","Hello!","Guten Tag!", "Yasou!"];
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+  const greeting = greetings[Math.floor(Math.random() * greetings.length)]; // Pick a random greeting.
 
-  // Add it to the page.
   const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  greetingContainer.innerText = greeting;  // Add it to the page.
 }
 
 /*************************
  *     Comments
  ************************/
-function queryComments(){
+async function queryComments(){
   const query = await fetch("/comment");
   const jsonResponse = await Response.json();
 
   // Insert comments to HTML
 }
 
+function covertCommentsToJSON(){
+  const comments = document.getElementById("comments");
+  const tmp = document.getElementById("comment-template");
 
- async function deleteComment(id){
+  comments.innerHTML = "";
+  comments.appendChild(template);
+  
+  for(const comment of payload){
+    const insert = createCommentElement(comment);
+    comments.append(insert);
+    comments.append(document.createElement("br"));
+  }
+}
 
- }
+async function createComment(){
+  const response = await fetch("/comments", {method: "PUT"});
+  console.log("Comment created");
+}
 
+async function upvoteComment(){
+  try{
+    const response = await fetch("/comments/upvote-add", {method: "PUT", headers: {id}});
+    queryComments();
+  }catch(e){
+    console.log("Error while upvoting comment! ".concat(e));
+  }
 
+}
+
+async function downvoteComment(){
+  try{
+    const response = await fetch("/comments/downvote-add", {method: "PUT", headers: {id}});
+    queryComments();
+  }catch(e){
+    console.log("Error while downvoting comment! ".concat(e));
+  }
+}
+
+async function removeComment(id) {
+  try {
+    const response = await fetch("/comments", { method: "DELETE", headers: { id } });
+    queryComments();
+  } catch (e) {
+    console.log("Error trying to delete comment!: ".concat(e));
+  }
+}
+
+// ...javascript gives me a slight headache...
+
+const addComments = async () => {
+  const response = await fetch("/comments");
+  const comments = await response.json();
+
+  const commentsContainer = document.getElementById('comments-container');
+
+  console.log(comments)
+
+  for (const comment of comments) {
+    const { timestamp, user, upvotes, text } = comment;
+
+    commentsContainer.insertAdjacentHTML(
+      'beforeend',
+      `<article class="media">
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <strong>${user}</strong>
+              <br>
+              ${text}
+              <br>
+              <small>${moment(timestamp).fromNow()}</small>
+            </p>
+          </div>
+      </article>`
+    );
+  }
+};
