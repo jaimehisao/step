@@ -4,23 +4,41 @@
 <head>
   <meta charset="UTF-8">
   <title>Hisao's Portfolio</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css">
   <script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
 </head>
 
-<body>
+<body onload="addComments()">
+  <!--<body style="background-color:#9deaff;">--->
   <div id="content">
     <!--Header & Basics-->
     <div id="info">
-      <h1>My Portfolio</h1>
       <h1>Jaime Hisao Yesaki Hinojosa</h1>
     </div>
+  </div>
+
+    <div id="clickBttn">
+      <button type="submit" class="btn btn-primary mb-2" onclick="greetingMaker()">Click here for a greeting!</button>
+    </div>
+    <div id="greeting-container"></div>
+
+    <!--Greeting BUTTON--->
+    <div id="clickBttn">
+      <button id=greetingButton class="btn btn-primary mb-2" onclick="randomFact()">Click Here for a random fact about me!</button>
+    </div>
+    <div id="fact-container"></div>
+
+    <div id="content">
     <!--Image of Myself-->
     <div class="imgwrapper">
+      
       <div class="imgcontainer" id="myimage">
         <a href="https://www.instagram.com/jaimehisao" target="_blank"><img class="imglink" src="/images/hisao2.jpg"
             alt="Hisao and Ely" width="300" height="400"></img></a>
       </div>
+    
       <!--Dev Social Media Icons & Links-->
       <div class="row">
         <div class="column">
@@ -36,9 +54,11 @@
     <div id="txt">
       <h2>About me: </h2>
       <p>
-        I'm a rising CS sophomore at Tec de Monterrey in Mexico.
+        Welcome! I'm a rising CS sophomore at Tec de Monterrey in Mexico.
         I am passionate about servers, databases, DevOps and always
-        learning new stuff and being on the cutting edge of technology.
+        learning new stuff and being on the cutting edge of technology. Besides CS I like airplanes, 
+        trying out new foods, new trails and meeting new people. Right now I am very excited about my internship
+        at Google and seeing what I can acomplish.
       </p>
       <!--Resume/Experience-->
       <h2>Work Experience</h2>
@@ -67,18 +87,32 @@
       </ul>
       <br>
     </div>
-    <!--The BUTTON--->
-    <div id="clickBttn">
-      <p>Click here to get a random fact about me!:</p>
-      <button onclick="addRandomFact()">Click!</button>
+    
+    <!--Comments Section-->
+    <div>
+      <h2>Comments Section</h2>
+      <p>Feel free to leave a comment here!</p>
+
+      <form id="comment-submit-form-group" action="/comments" method="POST">
+        <div class="form-group">
+          <label for="commentNameArea">Name</label>
+          <input type="text" class="form-control" name="name" placeholder="Sundar" required>
+        </div>
+        <div class="form-group">
+          <label for="commentTextArea">Comment</label>
+          <textarea class="form-control" name="comment" rows="2" placeholder="Very funny comment goes here..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary mb-2" >Submit Comment</button>
+        <button type="reset" class="btn btn-primary mb-2" >Reset Form</button>
+      </form>
+
+      <div id="comments-container">
+        <div id="comment-card">
+
+        </div>
+      </div>
+
     </div>
-    <div id="fact-container"></div>
-    <!--Greetings Container/Button-->
-    <div id="clickBttn">
-      <p>Click here for a greeting!:</p>
-      <button onclick="getName()">Click!</button>
-    </div>
-    <div id="name-container"></div>
   </div>
 </body>
 

@@ -12,55 +12,117 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/*************************
+ *     RANDOM FACT 
+ ************************/
+
 /**
  * Adds a random fact to the page.
  */
-function addRandomFact() {
+function randomFact() {
   const facts = ["My Google Drive contains over 22TB of files",
-   "I'm currently watching The Office for the third time",
-    "I have a turtle as a pet but I haven't seen it in a week"];
+  "I'm currently watching The Office for the third time",
+  "I have a turtle as a pet but I haven't seen it in a week",
+  "Sometimes I worry about the amount of computers that I have.",
+  "I low key hoard electronics and then regret not selling them when they were worth something",
+  "My mom thinks my CS Degree (in progress) gives me magical Facebook powers.",
+  "As a CS student I've been asked if I can hack a Facebook account more than about algorithms."];
 
-  // Pick a random greeting.
-  const fact = facts[Math.floor(Math.random() * facts.length)];
+  const fact = facts[Math.floor(Math.random() * facts.length)]; // Pick a random fact.
 
-  // Add it to the page.
-  const factContainer = document.getElementById('fact-container');
-  factContainer.innerText = fact;
+  const factContainer = document.getElementById('fact-container');  
+  factContainer.innerText = fact; // Add it to the page.
 }
 
-function getName(){
-  console.log('Fetching name!');
+/*************************
+ *     Greeting
+ ************************/
+function greetingMaker() {
+  const greetings = ["Bonjour!","Ahoj!","Hola!","Hello!","Guten Tag!", "Yasou!"];
 
-  // The fetch() function returns a Promise because the request is asynchronous.
-  const responsePromise = fetch('/data');
+  const greeting = greetings[Math.floor(Math.random() * greetings.length)]; // Pick a random greeting.
 
-  // When the request is complete, pass the response into handleResponse().
-  responsePromise.then(handleResponse);
+  const greetingContainer = document.getElementById('greeting-container');
+  greetingContainer.innerText = greeting;  // Add it to the page.
 }
 
+/*************************
+ *     Comments
+ ************************/
+ function covertCommentsToJSON(){
+  const comments = document.getElementById("comments");
+  const tmp = document.getElementById("comment-template");
 
-/**
- * Handles response by converting it to text and passing the result to
- * addQuoteToDom().
- */
-function handleResponse(response) {
-  console.log('Handling the response.');
-
-  // response.text() returns a Promise, because the response is a stream of
-  // content and not a simple variable.
-  const textPromise = response.text();
-
-  // When the response is converted to text, pass the result into the
-  // addQuoteToDom() function.
-  textPromise.then(addNameToDom);
+  comments.innerHTML = "";
+  comments.appendChild(template);
+  
+  for(const comment of payload){
+    const insert = createCommentElement(comment);
+    comments.append(insert);
+    comments.append(document.createElement("br"));
+  }
 }
 
-/** Adds name to the DOM. */
-function addNameToDom(name) {
-  console.log('Adding name to dom: ' + name);
-
-  const nameContainer = document.getElementById('name-container');
-  nameContainer.innerText = name;
+async function createComment(){
+  const response = await fetch("/comments", {method: "PUT"});
+  console.log("Comment created");
 }
 
+async function upvoteComment(){
+  try{
+    const response = await fetch("/comments/upvote-add", {method: "PUT", headers: {id}});
+    queryComments();
+  }catch(e){
+    console.log("Error while upvoting comment! ".concat(e));
+  }
 
+}
+
+async function downvoteComment(){
+  try{
+    const response = await fetch("/comments/downvote-add", {method: "PUT", headers: {id}});
+    queryComments();
+  }catch(e){
+    console.log("Error while downvoting comment! ".concat(e));
+  }
+}
+
+async function removeComment(id) {
+  try {
+    const response = await fetch("/comments", { method: "DELETE", headers: { id } });
+    queryComments();
+  } catch (e) {
+    console.log("Error trying to delete comment!: ".concat(e));
+  }
+}
+
+// ...javascript gives me a slight headache...
+
+const addComments = async () => {
+  const response = await fetch("/comments");
+  const comments = await response.json();
+
+  const commentsContainer = document.getElementById('comments-container');
+
+  console.log(comments)
+
+  for (const comment of comments) {
+    const { timestamp, user, upvotes, text } = comment;
+
+    commentsContainer.insertAdjacentHTML(
+      'beforeend',
+      `<article class="media">
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <strong>${user}</strong>
+              <br>
+              ${text}
+              <br>
+              <small>${moment(timestamp).fromNow()}</small>
+            </p>
+          </div>
+      </article>`
+    );
+  }
+};
