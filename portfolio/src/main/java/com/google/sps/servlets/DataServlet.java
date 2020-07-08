@@ -90,7 +90,7 @@ public class DataServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     for(Entity entity : results.asIterable()){
-      log.info("Got comment from datastore with properties: " + entity.getProperties()); //Debug output
+      log.debug("Got comment from datastore with properties: " + entity.getProperties()); //Debug output
       receivedComments.add(new Comment(entity));
     }
 

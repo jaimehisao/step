@@ -49,7 +49,7 @@ function greetingMaker() {
 /*************************
  *     Comments
  ************************/
-function covertCommentsToJSON(){
+ function covertCommentsToJSON(){
   const comments = document.getElementById("comments");
   const tmp = document.getElementById("comment-template");
 
