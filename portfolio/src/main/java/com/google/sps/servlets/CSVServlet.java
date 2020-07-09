@@ -16,6 +16,7 @@ package com.google.sps.servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -43,27 +44,28 @@ public class CSVServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json;");
 
-    List<CityCoords> coords = new ArrayList<>();
+    ArrayList<CityCoords> coords = new ArrayList<>();
 
     try{
-        Scanner scanner = new Scammer(getServletContext().getResourceAsStream("assets/markers.csv"));
+        Scanner scanner = new Scanner(getServletContext().getResourceAsStream("/assets/markers.csv"));
 
         while(scanner.hasNextLine()){
             String tmp = scanner.nextLine();
-            String dividedLine = tmp.split(",");
+            String[] dividedLine = tmp.split(",");
 
             String cityName = dividedLine[0];
             double latitude = Double.parseDouble(dividedLine[1]);
             double longitude = Double.parseDouble(dividedLine[2]);
 
             coords.add(new CityCoords(cityName, latitude, longitude));
+            System.out.println(cityName + " " + latitude + " " + longitude);
         }
         Gson gson = new Gson();
         String toSend = gson.toJson(coords);
         response.getWriter().println(toSend);
 
     }catch(Exception e){
-        System.out.println("CSV file containing city coordinates could not be found!")
+        System.out.println("CSV file containing city coordinates could not be found!");
     }
 
 
