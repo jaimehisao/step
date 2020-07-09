@@ -130,9 +130,26 @@ const addComments = async () => {
 /*************************
  *     RANDOM FACT 
  ************************/
+function loadFromCSV(){
+  d3.csv("/assets/markers.csv").then(function(data) {
+    console.log(data);
+  });
+}
+
+function addMarker(map, lat, long, title, description){
+  const marker = new google.maps.Marker(
+    {position: {lat: lat, lng:lng}, map: map, title: title}
+  );
+
+  const infoWindow = new google.maps.InfoWindow({content: description});
+  marker.addListener('click', () => {
+    infoWindow.open(map, marker);
+  });
+}
+
+
 function createMap(){
   const map = new google.maps.Map(
     document.getElementById('map'),
     {center: {lat: 37.422, lng: -122.084}, zoom: 16});
-  console.log('Created Map!')
-}
+  }
