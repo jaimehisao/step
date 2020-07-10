@@ -6,18 +6,20 @@
   text-align:center;
 }
 
+.icons{
+  height: 20px;
+  width: 20px;
+}
+
 #fact-container {
   text-align:center;
-  font-family: Trebuchet MS, Helvetica, sans-serif;
 }
 
 #greeting-container {
   text-align:center;
-  font-family: Trebuchet MS, Helvetica, sans-serif;
 }
 
 #clickBttn {
-  font-family: Comic Sans MS, cursive, sans-serif;
   text-align:center;
 }
 
@@ -29,7 +31,6 @@
   margin-left: auto;
   margin-right: auto;
   width: 650px;
-  font-family: Trebuchet MS, Helvetica, sans-serif;
 }
 
 #myimage {

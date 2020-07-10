@@ -111,18 +111,19 @@ const addComments = async () => {
 
     commentsContainer.insertAdjacentHTML(
       'beforeend',
-      `<article class="media">
-        <div class="media-content">
-          <div class="content">
-            <p>
-              <strong>${user}</strong>
-              <br>
-              ${text}
-              <br>
-              <small>${moment(timestamp).fromNow()}</small>
-            </p>
+      `<div class="media-content">
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+          <p>
+          <h5 class="card-title">${user}</h5>
+          <p class="card-text">${text}</p>
+          <small>${moment(timestamp).fromNow()}</small>
+          </p>
+            <a href="#" class="btn btn-primary" onclick="upvoteComment();">+1</a>
+            <a href="#" class="btn btn-primary" onclick="downvoteComment();">-1</a>
+            <a href="#" class="btn btn-primary" onclick="removeComment();">Delete</a>
           </div>
-      </article>`
+        </div>`
     );
   }
 };
