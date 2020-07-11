@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+let map;
+
 /*************************
  *     RANDOM FACT 
  ************************/
@@ -131,33 +133,30 @@ const addComments = async () => {
 /*************************
  *        MAPS 
  ************************/
-async function loadFromCSV(mapObject){
-  d3.csv("/assets/markers.csv").then(function(data) {
-    console.log(data);
-    for (const marker of data){
-      console.log(marker);
-      const { city, latitude, longitude} = marker;
-      addMarker(city, Number(latitude), Number(longitude), mapObject);
-    }
-  });
+async function loadFromCSV(){
+  const markersResponse = await fetch("/markers");
+  const markers = await markersResponse.json();
+
+  for (marker of markers){
+    const { content:city, lat:latitude, lng:longitude} = marker;
+      addMarker(city, Number(latitude), Number(longitude));
+  }
 }
 
-function addMarker(city, latitude, longitude, mapObject){
-  console.log(mapObject);
+function addMarker(city, latitude, longitude){
   const marker = new google.maps.Marker(
-    {position: {lat: latitude, lng:longitude}, map: mapObject, title: city}
+    {position: {lat: latitude, lng:longitude}, map: map, title: city}
   );
 
   const infoWindow = new google.maps.InfoWindow({content: city});
   marker.addListener('click', () => {
-    infoWindow.open(mapObject, marker);
+    infoWindow.open(map, marker);
   });
 }
 
 function createMap(){
-  const map = new google.maps.Map(
+   map = new google.maps.Map(
     document.getElementById('map'),
-    {center: {lat: 37.422, lng: -122.084}, zoom: 16});
-
-  loadFromCSV(map);
+    {center: {lat: 36.84, lng: -41.88}, zoom: 2});
+  loadFromCSV();
   }

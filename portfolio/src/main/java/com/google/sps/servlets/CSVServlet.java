@@ -40,36 +40,33 @@ import java.util.logging.Logger;
 @WebServlet("/markers")
 public class CSVServlet extends HttpServlet {
 
+  private static final Logger log = Logger.getLogger(DataServlet.class.getName());
+  private String toSend;
+
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("application/json;");
-
-    ArrayList<CityCoords> coords = new ArrayList<>();
-
-    try{
-        Scanner scanner = new Scanner(getServletContext().getResourceAsStream("/assets/markers.csv"));
-
+  public void init(){
+    Scanner scanner = new Scanner(getServletContext().getResourceAsStream("/WEB-INF/markers.csv"));
+    ArrayList<Marker> coords = new ArrayList<>();
+        String tmp = scanner.nextLine();
         while(scanner.hasNextLine()){
-            String tmp = scanner.nextLine();
+            tmp = scanner.nextLine();
             String[] dividedLine = tmp.split(",");
 
             String cityName = dividedLine[0];
             double latitude = Double.parseDouble(dividedLine[1]);
             double longitude = Double.parseDouble(dividedLine[2]);
 
-            coords.add(new CityCoords(cityName, latitude, longitude));
-            System.out.println(cityName + " " + latitude + " " + longitude);
+            coords.add(new Marker(latitude, longitude, cityName));
+            log.info(cityName + " " + latitude + " " + longitude);
         }
         Gson gson = new Gson();
-        String toSend = gson.toJson(coords);
-        response.getWriter().println(toSend);
+        toSend = gson.toJson(coords);
+  }
 
-    }catch(Exception e){
-        System.out.println("CSV file containing city coordinates could not be found!");
-    }
-
-
-
-    }
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    response.setContentType("application/json;");
+    response.getWriter().println(toSend);
+}
 
 }
