@@ -107,7 +107,7 @@ const addComments = async () => {
   console.log(comments)
 
   for (const comment of comments) {
-    const { timestamp, user, upvotes, text } = comment;
+    const { timestamp, user, upvotes, text, translatedText } = comment;
 
     commentsContainer.insertAdjacentHTML(
       'beforeend',
@@ -118,6 +118,7 @@ const addComments = async () => {
               <strong>${user}</strong>
               <br>
               ${text}
+              ${translatedText}
               <br>
               <small>${moment(timestamp).fromNow()}</small>
             </p>
@@ -128,11 +129,11 @@ const addComments = async () => {
 };
 
 /*************************
- *     RANDOM FACT 
+ *        MAPS 
  ************************/
 async function loadFromCSV(mapObject){
   d3.csv("/assets/markers.csv").then(function(data) {
-    console.log(data); // [{"Hello": "world"}, …]
+    console.log(data);
     for (const marker of data){
       console.log(marker);
       const { city, latitude, longitude} = marker;
