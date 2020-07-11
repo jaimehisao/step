@@ -23,6 +23,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
@@ -47,6 +51,7 @@ public class DataServlet extends HttpServlet {
 
   private final static String NAME_PROPERTY = "name";
   private final static String COMMENT_PROPERTY = "comment";
+  private final static String TRANSLATED_COMMENT_PROPERTY = "translatedComment";
   private final static String TIMESTAMP_PROPERTY = "timestamp";
   private final static String UPVOTES_PROPERTY = "upvotes";
   private final static String DOWNVOTES_PROPERTY = "downvotes";
@@ -65,8 +70,16 @@ public class DataServlet extends HttpServlet {
     String name = request.getParameter("name");
     String commentText = request.getParameter("comment");
     long timestamp = System.currentTimeMillis();
+
+    Translate translate = TranslateOptions.getDefaultInstance().getService();
+    Translation translation =
+        translate.translate(commentText, Translate.TranslateOption.targetLanguage("cs"));
+    String translatedComment = translation.getTranslatedText();
+
+
     commentEntity.setProperty(NAME_PROPERTY, name);
     commentEntity.setProperty(COMMENT_PROPERTY, commentText);
+    commentEntity.setProperty(TRANSLATED_COMMENT_PROPERTY, translatedComment);
     commentEntity.setProperty(TIMESTAMP_PROPERTY, timestamp);
     commentEntity.setProperty(UPVOTES_PROPERTY, 0);
     commentEntity.setProperty(DOWNVOTES_PROPERTY, 0);
