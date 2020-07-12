@@ -17,6 +17,7 @@
 
 #greeting-container {
   text-align:center;
+  margin-top: 20px;
 }
 
 #clickBttn {
@@ -51,8 +52,11 @@
   margin-right: auto;
 }
 
-#greeting-container {
-  margin-top: 20px;
+#comments-sect {
+  width: 80%;
+  text-align:center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #map {
@@ -69,6 +73,12 @@
   text-align:center;
 }
 
+body{margin-top:20px;}
+
+#comment-image{
+  height: 50px;
+  width: 50px;
+}    
 
 
 
