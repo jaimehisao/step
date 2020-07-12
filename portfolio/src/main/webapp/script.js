@@ -102,7 +102,7 @@ const addComments = async () => {
   const response = await fetch("/comments");
   const comments = await response.json();
 
-  const commentsContainer = document.getElementById('comments-container');
+  const commentsContainer = document.getElementById('card-cont');
 
   console.log(comments)
 
@@ -111,18 +111,13 @@ const addComments = async () => {
 
     commentsContainer.insertAdjacentHTML(
       'beforeend',
-      `<div class="media-content">
-        <div class="card" style="width: 18rem;">
+      `<div class="card">
           <div class="card-body">
           <p>
           <h5 class="card-title">${user}</h5>
           <p class="card-text">${text}</p>
           <small>${moment(timestamp).fromNow()}</small>
           </p>
-            <a href="#" class="btn btn-primary" onclick="upvoteComment();">+1</a>
-            <a href="#" class="btn btn-primary" onclick="downvoteComment();">-1</a>
-            <a href="#" class="btn btn-primary" onclick="removeComment();">Delete</a>
-          </div>
         </div>`
     );
   }

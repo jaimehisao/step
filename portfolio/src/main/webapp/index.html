@@ -8,40 +8,37 @@
   <link rel="stylesheet" href="style.css">
   <script src="script.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+  <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 </head>
 
 <body onload="addComments()">
-  <!--<body style="background-color:#9deaff;">--->
-  <div id="content">
-    <!--Header & Basics-->
-    <div id="info">
-      <h1>Jaime Hisao Yesaki Hinojosa</h1>
-    </div>
+  <div id="top-content" class="media">
+    <img src="/images/h2.png" alt="This is Hisao!" width="300" height="300" class="rounded-circle"></img>
+    <div class="media-body p-2 ml-2">
+      <h1 class="mt-0">Jaime Hisao Yesaki Hinojosa</h1>
+      <p>
+        I am passionate about servers, databases, DevOps and always
+        learning new stuff and being on the cutting edge of technology. Besides CS I like airplanes, 
+        trying out new foods, new trails and meeting new people. Right now I am very excited about my internship
+        at Google and seeing what I can acomplish.
+      </p>
+     <div class="social" id="networks">
+      <a href="https://www.instagram.com/jamehisao/" class="link">
+        <i class="fab fa-instagram" alt="Instagram" style='font-size:48px;color:black'></i>
+      </a>
+      <a href="https://github.com/jaimehisao" class="link">
+        <i class="fab fa-github" alt="GitHub" style='font-size:48px;color:black'></i>
+      </a>
+      <a href="https://mx.linkedin.com/in/jaime-hisao-yesaki-750a02155" class="link">
+        <i class="fab fa-linkedin-in" alt="LinkedIn" style='font-size:48px;color:black'></i>
+      </a>
+     </div>
+   </div>
   </div>
 
-
-    <div id="content">
-    <!--Image of Myself-->
-    <div class="imgwrapper">
-      
-      <div class="imgcontainer" id="myimage">
-        <a href="https://www.instagram.com/jaimehisao" target="_blank"><img class="imglink" src="/images/h2.png"
-            alt="Hisao" width="400" height="400"></img></a>
-      </div>
-    
-      <!--Dev Social Media Icons & Links-->
-      <div class="row">
-        <div class="column">
-        </div>
-        <div class="imgwrapper" id="git">
-          <div class="imgcontainer">
-            <a href="https://www.github.com/jaimehisao" target="_blank"><img class="imglink" src="/images/octocat.svg"
-                alt="El Logo de Github" width="40" height="70"></img></a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="txt">
+  <div id="content">
+  
+    <div id="content-text">
       <h2>About me: </h2>
       <p>
         Welcome! I'm a rising CS sophomore at Tec de Monterrey in Mexico.
@@ -107,8 +104,10 @@
         <button type="reset" class="btn btn-primary mb-2" >Reset Form</button>
       </form>
 
-      <div id="comments-container" class="card-columns">
-        
+      <div id="comments-container" class="card">
+        <ul class="list-group list-group-flush" id="card-cont">
+
+        </ul>
       </div>
 
     </div>
