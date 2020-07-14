@@ -59,6 +59,7 @@ public class DataServlet extends HttpServlet {
   private final static String ID_PROPERTY = "id";
 
   private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  Translate translate = TranslateOptions.getDefaultInstance().getService();
 
 
   @Override
@@ -71,7 +72,6 @@ public class DataServlet extends HttpServlet {
     String commentText = request.getParameter("comment");
     long timestamp = System.currentTimeMillis();
 
-    Translate translate = TranslateOptions.getDefaultInstance().getService();
     Translation translation =
         translate.translate(commentText, Translate.TranslateOption.targetLanguage("cs"));
     String translatedComment = translation.getTranslatedText();

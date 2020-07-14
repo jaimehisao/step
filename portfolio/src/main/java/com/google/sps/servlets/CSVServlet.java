@@ -45,6 +45,7 @@ public class CSVServlet extends HttpServlet {
 
   @Override
   public void init(){
+    super.init();
     Scanner scanner = new Scanner(getServletContext().getResourceAsStream("/WEB-INF/markers.csv"));
     ArrayList<Marker> coords = new ArrayList<>();
         String tmp = scanner.nextLine();
