@@ -18,21 +18,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query.SortDirection;
+
 import com.google.gson.Gson;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
+
 
 import java.util.logging.Logger;
 
@@ -45,24 +38,26 @@ public class CSVServlet extends HttpServlet {
 
   @Override
   public void init(){
-    super.init();
-    Scanner scanner = new Scanner(getServletContext().getResourceAsStream("/WEB-INF/markers.csv"));
+    try (Scanner scanner = new Scanner(getServletContext().getResourceAsStream(
+      "/WEB-INF/markers.csv"))){
+
     ArrayList<Marker> coords = new ArrayList<>();
         String tmp = scanner.nextLine();
         while(scanner.hasNextLine()){
-            tmp = scanner.nextLine();
-            String[] dividedLine = tmp.split(",");
+          tmp = scanner.nextLine();
+          String[] dividedLine = tmp.split(",");
 
-            String cityName = dividedLine[0];
-            double latitude = Double.parseDouble(dividedLine[1]);
-            double longitude = Double.parseDouble(dividedLine[2]);
+          String cityName = dividedLine[0];
+          double latitude = Double.parseDouble(dividedLine[1]);
+          double longitude = Double.parseDouble(dividedLine[2]);
 
-            coords.add(new Marker(latitude, longitude, cityName));
-            log.info(cityName + " " + latitude + " " + longitude);
+          coords.add(new Marker(latitude, longitude, cityName));
+          log.info(cityName + " " + latitude + " " + longitude);
         }
         Gson gson = new Gson();
         toSend = gson.toJson(coords);
   }
+}
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
