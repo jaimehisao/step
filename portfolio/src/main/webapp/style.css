@@ -10,20 +10,22 @@
   border: thin solid black;
   height: 500px;
   width: 500px;
+
+.icons{
+  height: 20px;
+  width: 20px;
 }
 
 #fact-container {
   text-align:center;
-  font-family: Trebuchet MS, Helvetica, sans-serif;
 }
 
 #greeting-container {
   text-align:center;
-  font-family: Trebuchet MS, Helvetica, sans-serif;
+  margin-top: 20px;
 }
 
 #clickBttn {
-  font-family: Comic Sans MS, cursive, sans-serif;
   text-align:center;
 }
 
@@ -34,8 +36,13 @@
 #content {
   margin-left: auto;
   margin-right: auto;
-  width: 650px;
-  font-family: Trebuchet MS, Helvetica, sans-serif;
+  width: 950px;
+}
+
+#top-content {
+  margin-left: auto;
+  margin-right: auto;
+  width: 950px;
 }
 
 #myimage {
@@ -50,10 +57,33 @@
   margin-right: auto;
 }
 
-#greeting-container {
-  margin-top: 20px;
+#comments-sect {
+  width: 80%;
+  text-align:center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
+#map {
+  border: thin solid black;
+  height: 500px;
+  width: 100%;
+}
+
+#networks{
+  text-align:center;
+}
+
+#top-content{
+  text-align:center;
+}
+
+body{margin-top:20px;}
+
+#comment-image{
+  height: 50px;
+  width: 50px;
+}    
 
 
 
