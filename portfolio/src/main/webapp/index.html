@@ -6,12 +6,14 @@
   <title>Hisao's Portfolio</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css">
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIO5KbhRZdxWOiE6xkqMa4Jv0OawPt_l0"></script>
   <script src="script.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 </head>
 
-<body onload="addComments()">
+<body onload="addComments(); createMap();">
   <div id="top-content" class="media">
     <img src="/images/h2.png" alt="This is Hisao!" width="300" height="300" class="rounded-circle"></img>
     <div class="media-body p-2 ml-2">
@@ -68,6 +70,9 @@
       <br>
     </div>
 
+    <h2>Places I've been to!</h2>
+    <div id="map"></div>
+    
     <div id="clickBttn">
       <button type="submit" class="btn btn-primary mb-2" onclick="greetingMaker()">Click here for a greeting!</button>
     </div>
@@ -82,7 +87,7 @@
     <!--Comments Section-->
     <div id="comments-sect">
       <h2>Comments Section</h2>
-      <p>Feel free to leave a comment here!</p>
+      <p>Feel free to leave a comment here! They are all automatically translated to Czech!</p>
 
       <form id="comment-submit-form-group" action="/comments" method="POST">
         <div class="form-group">

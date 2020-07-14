@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+let map;
+
 /*************************
  *     RANDOM FACT 
  ************************/
@@ -107,7 +109,7 @@ const addComments = async () => {
   console.log(comments)
 
   for (const comment of comments) {
-    const { timestamp, user, upvotes, text } = comment;
+    const { timestamp, user, upvotes, text, translatedText } = comment;
 
     
 
@@ -131,3 +133,34 @@ const addComments = async () => {
     );
   }
 };
+
+/*************************
+ *        MAPS 
+ ************************/
+async function loadFromCSV(){
+  const markersResponse = await fetch("/markers");
+  const markers = await markersResponse.json();
+
+  for (marker of markers){
+    const { content:city, lat:latitude, lng:longitude} = marker;
+      addMarker(city, Number(latitude), Number(longitude));
+  }
+}
+
+function addMarker(city, latitude, longitude){
+  const marker = new google.maps.Marker(
+    {position: {lat: latitude, lng:longitude}, map: map, title: city}
+  );
+
+  const infoWindow = new google.maps.InfoWindow({content: city});
+  marker.addListener('click', () => {
+    infoWindow.open(map, marker);
+  });
+}
+
+function createMap(){
+   map = new google.maps.Map(
+    document.getElementById('map'),
+    {center: {lat: 36.84, lng: -41.88}, zoom: 2});
+  loadFromCSV();
+  }
