@@ -8,58 +8,38 @@
   <link rel="stylesheet" href="style.css">
   <script src="script.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+  <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 </head>
 
 <body onload="addComments()">
-  <!--<body style="background-color:#9deaff;">--->
-  <div id="content">
-    <!--Header & Basics-->
-    <div id="info">
-      <h1>Jaime Hisao Yesaki Hinojosa</h1>
-    </div>
-  </div>
-
-    <div id="clickBttn">
-      <button type="submit" class="btn btn-primary mb-2" onclick="greetingMaker()">Click here for a greeting!</button>
-    </div>
-    <div id="greeting-container"></div>
-
-    <!--Greeting BUTTON--->
-    <div id="clickBttn">
-      <button id=greetingButton class="btn btn-primary mb-2" onclick="randomFact()">Click Here for a random fact about me!</button>
-    </div>
-    <div id="fact-container"></div>
-
-    <div id="content">
-    <!--Image of Myself-->
-    <div class="imgwrapper">
-      
-      <div class="imgcontainer" id="myimage">
-        <a href="https://www.instagram.com/jaimehisao" target="_blank"><img class="imglink" src="/images/hisao2.jpg"
-            alt="Hisao and Ely" width="300" height="400"></img></a>
-      </div>
-    
-      <!--Dev Social Media Icons & Links-->
-      <div class="row">
-        <div class="column">
-        </div>
-        <div class="imgwrapper" id="git">
-          <div class="imgcontainer">
-            <a href="https://www.github.com/jaimehisao" target="_blank"><img class="imglink" src="/images/octocat.svg"
-                alt="El Logo de Github" width="40" height="70"></img></a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="txt">
-      <h2>About me: </h2>
+  <div id="top-content" class="media">
+    <img src="/images/h2.png" alt="This is Hisao!" width="300" height="300" class="rounded-circle"></img>
+    <div class="media-body p-2 ml-2">
+      <h1 class="mt-0">Jaime Hisao Yesaki Hinojosa</h1>
       <p>
-        Welcome! I'm a rising CS sophomore at Tec de Monterrey in Mexico.
         I am passionate about servers, databases, DevOps and always
         learning new stuff and being on the cutting edge of technology. Besides CS I like airplanes, 
         trying out new foods, new trails and meeting new people. Right now I am very excited about my internship
         at Google and seeing what I can acomplish.
       </p>
+     <div class="social" id="networks">
+      <a href="https://www.instagram.com/jaimehisao/" class="link">
+        <i class="fab fa-instagram" alt="Instagram" style='font-size:48px;color:black'></i>
+      </a>
+      <a href="https://github.com/jaimehisao" class="link">
+        <i class="fab fa-github" alt="GitHub" style='font-size:48px;color:black'></i>
+      </a>
+      <a href="https://mx.linkedin.com/in/jaime-hisao-yesaki-750a02155" class="link">
+        <i class="fab fa-linkedin-in" alt="LinkedIn" style='font-size:48px;color:black'></i>
+      </a>
+     </div>
+   </div>
+  </div>
+
+  <div id="content">
+  
+    <div id="content-text">
+      <br>
       <!--Resume/Experience-->
       <h2>Work Experience</h2>
       <ul>
@@ -87,9 +67,20 @@
       </ul>
       <br>
     </div>
-    
+
+    <div id="clickBttn">
+      <button type="submit" class="btn btn-primary mb-2" onclick="greetingMaker()">Click here for a greeting!</button>
+    </div>
+    <div id="greeting-container"></div>
+
+    <!--Greeting BUTTON--->
+    <div id="clickBttn">
+      <button id=greetingButton class="btn btn-primary mb-2" onclick="randomFact()">Click Here for a random fact about me!</button>
+    </div>
+    <div id="fact-container"></div>
+    <br>
     <!--Comments Section-->
-    <div>
+    <div id="comments-sect">
       <h2>Comments Section</h2>
       <p>Feel free to leave a comment here!</p>
 
@@ -105,8 +96,8 @@
         <button type="submit" class="btn btn-primary mb-2" >Submit Comment</button>
         <button type="reset" class="btn btn-primary mb-2" >Reset Form</button>
       </form>
-
-      <div id="comments-container">
+      <br>
+      <div id="comments-container" class="card">
         <div id="comment-card">
 
         </div>

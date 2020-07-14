@@ -109,20 +109,25 @@ const addComments = async () => {
   for (const comment of comments) {
     const { timestamp, user, upvotes, text } = comment;
 
+    
+
     commentsContainer.insertAdjacentHTML(
       'beforeend',
-      `<article class="media">
-        <div class="media-content">
-          <div class="content">
-            <p>
-              <strong>${user}</strong>
-              <br>
-              ${text}
-              <br>
-              <small>${moment(timestamp).fromNow()}</small>
-            </p>
+      `<div class="media-content">
+      <div class="content">
+          <a href="#" class="float-left">
+            <img src="https://bootdey.com/img/Content/user_1.jpg" id="comment-image" alt="" class="rounded-circle">
+          </a>
+          <div class="media-body">
+          <strong class="text-success float-left">${user}</strong>
+            <span class="float-right">
+               <small class="text-muted">${moment(timestamp).fromNow()}</small>
+            </span>
+            <br>
+          <p class="float-left">${text}</p>
           </div>
-      </article>`
+          </div>
+          </div>`
     );
   }
 };
