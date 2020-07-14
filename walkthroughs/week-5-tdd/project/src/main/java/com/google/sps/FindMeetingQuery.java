@@ -15,9 +15,31 @@
 package com.google.sps;
 
 import java.util.Collection;
+import java.util.HashSet;
+
 
 public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    throw new UnsupportedOperationException("TODO: Implement this method.");
+    if(request.getAttendees().size() == 0 && request.getOptionalAttendees().size() == 0){
+      Collection<TimeRange> emptyCol = new HashSet<>();
+
+      System.out.println("Event has no atendees!");
+
+      return emptyCol;
+    }
+
+    System.out.println("Number of Meetings: " + events.size());
+
+    for(Event e : events){
+      for(Event e2 : events){
+        if(!e.equals(e2)){
+          //Check if they collide
+          if(e.getWhen().overlaps(e2.getWhen())){
+            System.out.println("Meeting overlaps!");
+          }
+        }
+      }
+    }
+    return null;
   }
 }
