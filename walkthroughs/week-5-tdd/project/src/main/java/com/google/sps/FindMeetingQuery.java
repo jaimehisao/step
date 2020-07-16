@@ -25,52 +25,42 @@ import java.util.Arrays;
 
 public final class FindMeetingQuery {
 
+  /**
+   * Returns {@code TimeRange} when a meeting can happen based on other events and the
+   * meeting participants involved.
+   * @param events {@code Collection} of events happening.
+   * @param request {@code MeetingRequest} for a meeting
+   * @return Collection of {@code TimeRange} when a meeting can happen. 
+   */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    System.out.println("");
-    System.out.println("NEW QUERY");
+    final int MINUTES_IN_A_DAY = 1440;
     ArrayList<TimeRange> possibleTimes = new ArrayList<TimeRange>();
     ArrayList<Event> localEvents = new ArrayList<Event>(events);
-
-
-
-    final int MINUTES_IN_A_DAY = 1440;
     boolean[] availableTimes = new boolean[MINUTES_IN_A_DAY+1];
 
-    Arrays.fill(availableTimes, false);
-
+    //Meeting is longer than a day, that can't happen
     if(request.getDuration() > MINUTES_IN_A_DAY){
       return possibleTimes;
     }
 
-
     //No atendees on the request
     if(request.getAttendees().size() == 0 && request.getOptionalAttendees().size() == 0){
       possibleTimes.add(TimeRange.WHOLE_DAY);
-      System.out.println("RETURNING: ");
-    for(TimeRange tr : possibleTimes){
-      System.out.println(tr.toString());
-    }
       return possibleTimes;
     }
 
+    //Clean schedule, all day is free
     if(localEvents.isEmpty()){
       possibleTimes.add(TimeRange.WHOLE_DAY);
-      System.out.println("RETURNING1: ");
-    for(TimeRange tr : possibleTimes){
-      System.out.println(tr.toString());
-    }
       return possibleTimes;
     }
 
     for(Event event : events){
-      System.out.println("ENTERING: ");
       //If event has no atendees involved in the request.
       if(!Collections.disjoint(event.getAttendees(), request.getAttendees())){
-        System.out.println("Filling arr from " + event.getWhen().start() + " to " + event.getWhen().end());
         Arrays.fill(availableTimes, event.getWhen().start(), event.getWhen().end(), true);
       }else{
         localEvents.remove(event);
-        System.out.println("Scheduled event has no atendees involved in the request...removing");
       }
     }
 
@@ -83,31 +73,22 @@ public final class FindMeetingQuery {
         if(intervalDuration >= request.getDuration()){
           TimeRange tr = TimeRange.fromStartDuration(i-intervalDuration, intervalDuration); 
           possibleTimes.add(tr);
-          System.out.println("New TR added: " + tr.toString());
         }
         intervalDuration = 0;
       }
     }
 
+    //Adds the time available towards the EoD
     if(availableTimes.length - intervalDuration  >= request.getDuration() && intervalDuration != 1){
       TimeRange tr = TimeRange.fromStartDuration(availableTimes.length - intervalDuration, intervalDuration-1); 
-      System.out.println("New TR added at the end: " + tr.toString());
-      System.out.println("Duration: " + intervalDuration);
       possibleTimes.add(tr);
     }
 
+    //If there is no event, then the whole day is free.
     if(localEvents.size() == 0){
       possibleTimes.add(TimeRange.WHOLE_DAY);
       return possibleTimes;
     }
-    
-    //System.out.println(Arrays.toString(availableTimes));
-    System.out.println("RETURNING: ");
-    for(TimeRange tr : possibleTimes){
-      System.out.println(tr.toString());
-    }
     return possibleTimes;
   }
-
-
 }
