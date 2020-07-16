@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays; 
 
 
 public final class FindMeetingQuery {
@@ -78,9 +79,9 @@ public final class FindMeetingQuery {
         //Exclude the TimeRange
         timeRangeIterator.remove();
 
-        TimeRange t1 = TimeRange.fromStartEnd(tmp.start(), toExclude.start()-1, true);
+        TimeRange t1 = TimeRange.fromStartEnd(tmp.start(), toExclude.start(), true);
         System.out.println("New TimeRange created " + t1.toString());
-        TimeRange t2 = TimeRange.fromStartEnd(toExclude.end(), tmp.end()-1, true);
+        TimeRange t2 = TimeRange.fromStartEnd(toExclude.end(), tmp.end(), true);
         System.out.println("New TimeRange created " + t2.toString());
 
         returnTR.add(t1);
@@ -100,67 +101,83 @@ public final class FindMeetingQuery {
     System.out.println("");
     System.out.println("NEW QUERY");
     ArrayList<TimeRange> possibleTimes = new ArrayList<TimeRange>();
-    ArrayList<Event> curatedEvents = new ArrayList<Event>(events);
+    ArrayList<Event> localEvents = new ArrayList<Event>(events);
 
-    
 
-    possibleTimes.add(TimeRange.WHOLE_DAY);
-    
-    //No atendees
-    if(request.getAttendees().size() == 0 && request.getOptionalAttendees().size() == 0){
+
+    final int MINUTES_IN_A_DAY = 1440;
+    boolean[] availableTimes = new boolean[MINUTES_IN_A_DAY+1];
+
+    Arrays.fill(availableTimes, false);
+
+    if(request.getDuration() > MINUTES_IN_A_DAY){
       return possibleTimes;
     }
 
-    System.out.println("Before removing merges");
-    for(Event e : curatedEvents){
-      System.out.println(e.getWhen().toString());
+
+    //No atendees on the request
+    if(request.getAttendees().size() == 0 && request.getOptionalAttendees().size() == 0){
+      possibleTimes.add(TimeRange.WHOLE_DAY);
+      System.out.println("RETURNING: ");
+    for(TimeRange tr : possibleTimes){
+      System.out.println(tr.toString());
+    }
+      return possibleTimes;
     }
 
-    curatedEvents = mergeOverlappingEvents(curatedEvents);
-
-    System.out.println("After removing merges");
-
-    for(Event e : curatedEvents){
-      System.out.println(e.getWhen().toString());
+    if(localEvents.isEmpty()){
+      possibleTimes.add(TimeRange.WHOLE_DAY);
+      System.out.println("RETURNING1: ");
+    for(TimeRange tr : possibleTimes){
+      System.out.println(tr.toString());
+    }
+      return possibleTimes;
     }
 
-    Iterator<Event> eventIterator = curatedEvents.iterator();
-    for(;eventIterator.hasNext();){
-      Event tmp = eventIterator.next();
-
-      //Remove any events that do not conflict with the atendees.
-      boolean atendeesDoNotConflict = Collections.disjoint(tmp.getAttendees(), request.getAttendees());
-      if(atendeesDoNotConflict){
+    for(Event event : events){
+      System.out.println("ENTERING: ");
+      //If event has no atendees involved in the request.
+      if(!Collections.disjoint(event.getAttendees(), request.getAttendees())){
+        System.out.println("Filling arr from " + event.getWhen().start() + " to " + event.getWhen().end());
+        Arrays.fill(availableTimes, event.getWhen().start(), event.getWhen().end(), true);
+      }else{
+        localEvents.remove(event);
         System.out.println("Scheduled event has no atendees involved in the request...removing");
-        eventIterator.remove();
-        continue;
       }
+    }
 
-      System.out.println("Splitting timeranges");
-      for(TimeRange ps : possibleTimes){
-        System.out.println(ps.toString());
+    //Find free time in the array and if they fit the meeting, create the time range
+    int intervalDuration = 0;
+    for(int i = 0; i < availableTimes.length; i++){
+      if(!availableTimes[i]){
+        intervalDuration++;
+      }else if(intervalDuration != 0){
+        if(intervalDuration >= request.getDuration()){
+          TimeRange tr = TimeRange.fromStartDuration(i-intervalDuration, intervalDuration); 
+          possibleTimes.add(tr);
+          System.out.println("New TR added: " + tr.toString());
+        }
+        intervalDuration = 0;
       }
-      
-      possibleTimes = splitTimeRange(possibleTimes, tmp.getWhen());
-      
     }
 
-    Iterator<TimeRange> rangesIterator = possibleTimes.iterator();
-    for(;rangesIterator.hasNext();){
-      TimeRange tmp = rangesIterator.next();
-      int distanceBetweenEvents = 0;
-
-
+    if(availableTimes.length - intervalDuration  >= request.getDuration() && intervalDuration != 1){
+      TimeRange tr = TimeRange.fromStartDuration(availableTimes.length - intervalDuration, intervalDuration-1); 
+      System.out.println("New TR added at the end: " + tr.toString());
+      System.out.println("Duration: " + intervalDuration);
+      possibleTimes.add(tr);
     }
 
-    System.out.println("Number of Meetings: " + events.size());
-
-    for(Event e : events){
-      System.out.println(e.getWhen().toString());
+    if(localEvents.size() == 0){
+      possibleTimes.add(TimeRange.WHOLE_DAY);
+      return possibleTimes;
     }
-
-    System.out.println("");
-
+    
+    //System.out.println(Arrays.toString(availableTimes));
+    System.out.println("RETURNING: ");
+    for(TimeRange tr : possibleTimes){
+      System.out.println(tr.toString());
+    }
     return possibleTimes;
   }
 
