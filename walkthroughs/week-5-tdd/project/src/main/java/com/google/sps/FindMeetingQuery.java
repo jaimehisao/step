@@ -24,13 +24,34 @@ import java.util.ArrayList;
 
 public final class FindMeetingQuery {
 
+  /**
+   * Removes an event that is shadowed by a larger event. This is done to ease the process of 
+   * splitting the tame ranges when {@code mergeOverlappingEvents()} runs.
+   * @param events The events that may overlap.
+   * @return ArrayList of merged events.
+   */
   public ArrayList<Event> mergeOverlappingEvents(Collection<Event> events){
     ArrayList<Event> localEvents = new ArrayList<Event>(events);
 
     for(int i = 0; i < localEvents.size(); i++){
       for(int j = i+1; j < localEvents.size(); j++){
-        if(localEvents.get(i).getWhen().contains(localEvents.get(j).getWhen())){
+        if(localEvents.get(i).getWhen().overlaps(localEvents.get(j).getWhen())){
           System.out.println("Events overlap, will merge into single timeframe");
+
+          int start1 = localEvents.get(i).getWhen().start();
+          int start2 = localEvents.get(j).getWhen().start();
+          int end1 = localEvents.get(i).getWhen().end();
+          int end2 = localEvents.get(j).getWhen().end();
+
+
+          int start = start1 < start2 ? start1 : start2;
+          int end = end1 > end2 ? end1-1 : end2-1;
+
+          Event tmpSet = localEvents.get(i);
+          TimeRange newTimeRange = TimeRange.fromStartEnd(start, end, true);
+          Event newEvent = new Event(tmpSet.getTitle(), newTimeRange, tmpSet.getAttendees());
+          localEvents.set(i, newEvent);
+
           //Change time range for Event 1 to the "big" timerange, remove the other
           localEvents.remove(j);
         }
@@ -81,6 +102,8 @@ public final class FindMeetingQuery {
     ArrayList<TimeRange> possibleTimes = new ArrayList<TimeRange>();
     ArrayList<Event> curatedEvents = new ArrayList<Event>(events);
 
+    
+
     possibleTimes.add(TimeRange.WHOLE_DAY);
     
     //No atendees
@@ -88,7 +111,18 @@ public final class FindMeetingQuery {
       return possibleTimes;
     }
 
+    System.out.println("Before removing merges");
+    for(Event e : curatedEvents){
+      System.out.println(e.getWhen().toString());
+    }
+
     curatedEvents = mergeOverlappingEvents(curatedEvents);
+
+    System.out.println("After removing merges");
+
+    for(Event e : curatedEvents){
+      System.out.println(e.getWhen().toString());
+    }
 
     Iterator<Event> eventIterator = curatedEvents.iterator();
     for(;eventIterator.hasNext();){
@@ -106,13 +140,18 @@ public final class FindMeetingQuery {
       for(TimeRange ps : possibleTimes){
         System.out.println(ps.toString());
       }
+      
       possibleTimes = splitTimeRange(possibleTimes, tmp.getWhen());
+      
+    }
+
+    Iterator<TimeRange> rangesIterator = possibleTimes.iterator();
+    for(;rangesIterator.hasNext();){
+      TimeRange tmp = rangesIterator.next();
+      int distanceBetweenEvents = 0;
 
 
     }
-
-
-
 
     System.out.println("Number of Meetings: " + events.size());
 
@@ -124,4 +163,6 @@ public final class FindMeetingQuery {
 
     return possibleTimes;
   }
+
+
 }
