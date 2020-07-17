@@ -25,16 +25,22 @@ import java.util.Arrays;
 
 public final class FindMeetingQuery {
 
+  private final int MINUTES_IN_A_DAY = 1440;
+
   /**
-   * @param busyTimes array containing all times where there is a meeting.
-   * @param request Duration of the requested Meeting
-   * @return {@code ArrayList} with all possible timeranges for a meeting to happen.
+   * Returns an {@ArrayList} of {@code TimeRange}s of when an Event can take place.
+   * Runtime: O(1) -> Regardless of the amount of events/attendees, a day will always
+   * have the same number of minutes, which is what the array represents.
+   * @param busyTimes boolean array containing all times where there is a meeting.
+   * @param request Desired duration of the requested event
+   * @return {@code ArrayList} with all possible timeranges for an event to happen.
    */
   private ArrayList<TimeRange> findTimeRanges(boolean[] busyTimes, long duration){
     ArrayList<TimeRange> possibleTimes = new ArrayList<TimeRange>();
     // Find free time in the array and if they fit the meeting, create the time range
     int availabilityInterval = 0;
-    for(int minuteOfTheDay = 0; minuteOfTheDay < busyTimes.length; minuteOfTheDay++){
+    for(int minuteOfTheDay = 0; minuteOfTheDay < MINUTES_IN_A_DAY+1; minuteOfTheDay++){
+      // If the minute is not busy, add a free minute to the counter.
       if(!busyTimes[minuteOfTheDay]){
         availabilityInterval++; 
       }else if(availabilityInterval != 0){
@@ -46,12 +52,13 @@ public final class FindMeetingQuery {
       }
     }
 
-    if(availabilityInterval == 1441){
+    // If the whole day is available return a single TimeRange
+    if(availabilityInterval == MINUTES_IN_A_DAY+1){
       possibleTimes.add(TimeRange.WHOLE_DAY);
       return possibleTimes;
     }
 
-    // Adds the time available towards the EoD
+    // In case there is no event later, this will add the time since the last event until EoD.
     if(busyTimes.length - availabilityInterval  >= duration && availabilityInterval != 1){
       TimeRange tr = TimeRange.fromStartDuration(busyTimes.length - availabilityInterval, availabilityInterval-1); 
       possibleTimes.add(tr);
@@ -62,13 +69,15 @@ public final class FindMeetingQuery {
   /**
    * Returns {@code TimeRange} when a meeting can happen based on other events and the
    * meeting participants involved.
-   * Runtime: O(N*M) (events*possible attendees)
+   * Runtime: O(N*M) -> The runtime of {@code query} will be proportional to the amount of 
+   * events and attendees. This is seen when calling {@code Collections.disjoint} because it 
+   * is called once for the mandatory attendees and once for the optional attendees and each time 
+   * (events*possible attendees) 
    * @param events {@code Collection} of events happening.
    * @param request {@code MeetingRequest} for a meeting
    * @return Collection of {@code TimeRange} when a meeting can happen. 
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    final int MINUTES_IN_A_DAY = 1440;
     ArrayList<TimeRange> possibleTimes = new ArrayList<TimeRange>();
     boolean[] busyTimesMandatoryAttendees = new boolean[MINUTES_IN_A_DAY+1];
     boolean[] busyTimesOptionalAttendees = new boolean[MINUTES_IN_A_DAY+1];
@@ -99,8 +108,6 @@ public final class FindMeetingQuery {
       }else if(!Collections.disjoint(event.getAttendees(), request.getOptionalAttendees())){ 
         // If an optional attendee is busy, only the optional attendee schedule is blocked.
         Arrays.fill(busyTimesOptionalAttendees, event.getWhen().start(), event.getWhen().end(), true); 
-      }else{
-        eventsWithConflict++;
       }
     }
 
