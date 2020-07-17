@@ -45,7 +45,9 @@ public final class FindMeetingQueryTest {
   private static final int TIME_1100AM = TimeRange.getTimeInMinutes(11, 00);
   private static final int TIME_1500PM = TimeRange.getTimeInMinutes(15, 00);
   private static final int TIME_1600PM = TimeRange.getTimeInMinutes(16, 00);
+  private static final int TIME_1159PM = TimeRange.getTimeInMinutes(23, 59);
 
+  private static final int DURATION_1_MINUTE = 1;
   private static final int DURATION_15_MINUTES = 15;
   private static final int DURATION_30_MINUTES = 30;
   private static final int DURATION_60_MINUTES = 60;
@@ -415,6 +417,26 @@ public final class FindMeetingQueryTest {
     
     Collection<TimeRange> actual = query.query(events, request);
     Collection<TimeRange> expected = Arrays.asList(TimeRange.WHOLE_DAY);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void eodMeeting() {
+    // Two optionals with no gaps. Should return WHOLE_DAY since all mandatory (0) 
+    // are free all day and the optionals can't be accomodated.
+    // Those gaps should be returned
+    // Mandatory:|----------A---------|
+    // Day     : |---------------------|
+    // Options :                      ||  
+
+    Collection<Event> events = Arrays.asList(
+        new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TimeRange.END_OF_DAY, false),
+            Arrays.asList(PERSON_A)));
+
+    MeetingRequest request = new MeetingRequest(Arrays.asList(PERSON_A), DURATION_1_MINUTE);
+    
+    Collection<TimeRange> actual = query.query(events, request);
+    Collection<TimeRange> expected = Arrays.asList(TimeRange.fromStartDuration(TIME_1159PM, 1));
     Assert.assertEquals(expected, actual);
   }
 }
