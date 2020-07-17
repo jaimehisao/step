@@ -14,8 +14,8 @@
 
 package com.google.sps;
 
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -24,6 +24,31 @@ import java.util.Arrays;
 
 
 public final class FindMeetingQuery {
+
+  private ArrayList<TimeRange> findTimeRanges(boolean[] busyTimes, MeetingRequest request){
+    ArrayList<TimeRange> possibleTimes = new ArrayList<TimeRange>();
+    // Find free time in the array and if they fit the meeting, create the time range
+    int availabilityInterval = 0;
+    for(int minuteOfTheDay = 0; minuteOfTheDay < busyTimes.length; minuteOfTheDay++){
+      if(!busyTimes[minuteOfTheDay]){
+        availabilityInterval++;
+      }else if(availabilityInterval != 0){
+        if(availabilityInterval >= request.getDuration()){
+          TimeRange tr = TimeRange.fromStartDuration(minuteOfTheDay-availabilityInterval, availabilityInterval); 
+          possibleTimes.add(tr);
+        }
+        availabilityInterval = 0;
+      }
+    }
+
+    // Adds the time available towards the EoD
+    if(busyTimes.length - availabilityInterval  >= request.getDuration() && availabilityInterval != 1){
+      TimeRange tr = TimeRange.fromStartDuration(busyTimes.length - availabilityInterval, availabilityInterval-1); 
+      possibleTimes.add(tr);
+    }
+
+    return possibleTimes;
+  }
 
   /**
    * Returns {@code TimeRange} when a meeting can happen based on other events and the
@@ -36,59 +61,51 @@ public final class FindMeetingQuery {
     final int MINUTES_IN_A_DAY = 1440;
     ArrayList<TimeRange> possibleTimes = new ArrayList<TimeRange>();
     ArrayList<Event> localEvents = new ArrayList<Event>(events);
-    boolean[] availableTimes = new boolean[MINUTES_IN_A_DAY+1];
+    boolean[] busyTimesMandatoryAttendees = new boolean[MINUTES_IN_A_DAY+1];
+    boolean[] busyTimesOptionalAttendees = new boolean[MINUTES_IN_A_DAY+1];
+    int eventsWithNoConflict = 0;
 
-    //Meeting is longer than a day, that can't happen
+    // Meeting is longer than a day, that can't happen
     if(request.getDuration() > MINUTES_IN_A_DAY){
       return possibleTimes;
     }
 
-    //No atendees on the request
+    // No attendees on the request
     if(request.getAttendees().size() == 0 && request.getOptionalAttendees().size() == 0){
       possibleTimes.add(TimeRange.WHOLE_DAY);
       return possibleTimes;
     }
 
-    //Clean schedule, all day is free
+    // Clean schedule, all day is free
     if(localEvents.isEmpty()){
       possibleTimes.add(TimeRange.WHOLE_DAY);
       return possibleTimes;
     }
 
     for(Event event : events){
-      //If event has no atendees involved in the request.
+      // If a mandatory is busy, the meeting can't happen, so time is blocked out on both arrays.
       if(!Collections.disjoint(event.getAttendees(), request.getAttendees())){
-        Arrays.fill(availableTimes, event.getWhen().start(), event.getWhen().end(), true);
+        Arrays.fill(busyTimesMandatoryAttendees, event.getWhen().start(), event.getWhen().end(), true);
+        Arrays.fill(busyTimesOptionalAttendees, event.getWhen().start(), event.getWhen().end(), true);
+      }else if(!Collections.disjoint(event.getAttendees(), request.getOptionalAttendees())){
+        // If an optional attendee is busy, only that schedule is blocked.
+        Arrays.fill(busyTimesOptionalAttendees, event.getWhen().start(), event.getWhen().end(), true);
       }else{
-        localEvents.remove(event);
+        eventsWithNoConflict++;
       }
     }
 
-    //Find free time in the array and if they fit the meeting, create the time range
-    int intervalDuration = 0;
-    for(int i = 0; i < availableTimes.length; i++){
-      if(!availableTimes[i]){
-        intervalDuration++;
-      }else if(intervalDuration != 0){
-        if(intervalDuration >= request.getDuration()){
-          TimeRange tr = TimeRange.fromStartDuration(i-intervalDuration, intervalDuration); 
-          possibleTimes.add(tr);
-        }
-        intervalDuration = 0;
-      }
-    }
-
-    //Adds the time available towards the EoD
-    if(availableTimes.length - intervalDuration  >= request.getDuration() && intervalDuration != 1){
-      TimeRange tr = TimeRange.fromStartDuration(availableTimes.length - intervalDuration, intervalDuration-1); 
-      possibleTimes.add(tr);
-    }
-
-    //If there is no event, then the whole day is free.
-    if(localEvents.size() == 0){
+    // If there is no event, then the whole day is free.
+    if(localEvents.size()-eventsWithNoConflict == 0){
       possibleTimes.add(TimeRange.WHOLE_DAY);
       return possibleTimes;
     }
+
+    possibleTimes = findTimeRanges(busyTimesOptionalAttendees, request);
+    if(possibleTimes.size() == 0){
+      return findTimeRanges(busyTimesMandatoryAttendees, request);
+    }
+    
     return possibleTimes;
   }
 }
