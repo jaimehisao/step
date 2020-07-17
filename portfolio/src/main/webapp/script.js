@@ -126,7 +126,10 @@ const addComments = async () => {
                <small class="text-muted">${moment(timestamp).fromNow()}</small>
             </span>
             <br>
-          <p class="float-left">${text}</p>
+            <div class="float-left">
+          <p>${text}</p>
+          <i>${translatedText}</i>
+           </div>
           </div>
           </div>
           </div>`
