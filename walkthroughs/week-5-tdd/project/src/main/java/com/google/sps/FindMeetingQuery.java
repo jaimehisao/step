@@ -70,10 +70,8 @@ public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     final int MINUTES_IN_A_DAY = 1440;
     ArrayList<TimeRange> possibleTimes = new ArrayList<TimeRange>();
-    //ArrayList<Event> events = new ArrayList<Event>(events);
     boolean[] busyTimesMandatoryAttendees = new boolean[MINUTES_IN_A_DAY+1];
     boolean[] busyTimesOptionalAttendees = new boolean[MINUTES_IN_A_DAY+1];
-    int eventsWithConflict = 0;
 
     // Meeting is longer than a day, that can't happen
     if(request.getDuration() > MINUTES_IN_A_DAY){
