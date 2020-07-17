@@ -39,12 +39,12 @@ public final class FindMeetingQuery {
     ArrayList<TimeRange> possibleTimes = new ArrayList<TimeRange>();
     // Find free time in the array and if they fit the meeting, create the time range
     int availabilityInterval = 0;
-    for(int minuteOfTheDay = 0; minuteOfTheDay < MINUTES_IN_A_DAY+1; minuteOfTheDay++){
+    for (int minuteOfTheDay = 0; minuteOfTheDay < busyTimes.length; minuteOfTheDay++) {
       // If the minute is not busy, add a free minute to the counter.
-      if(!busyTimes[minuteOfTheDay]){
+      if (!busyTimes[minuteOfTheDay]) {
         availabilityInterval++; 
-      }else if(availabilityInterval != 0){
-        if(availabilityInterval >= duration){
+      } else if (availabilityInterval != 0) {
+        if(availabilityInterval >= duration) {
           TimeRange tr = TimeRange.fromStartDuration(minuteOfTheDay-availabilityInterval, availabilityInterval); 
           possibleTimes.add(tr);
         }
@@ -53,13 +53,13 @@ public final class FindMeetingQuery {
     }
 
     // If the whole day is available return a single TimeRange
-    if(availabilityInterval == MINUTES_IN_A_DAY+1){
+    if (availabilityInterval == MINUTES_IN_A_DAY+1) {
       possibleTimes.add(TimeRange.WHOLE_DAY);
       return possibleTimes;
     }
 
     // In case there is no event later, this will add the time since the last event until EoD.
-    if(busyTimes.length - availabilityInterval  >= duration && availabilityInterval != 1){
+    if (busyTimes.length - availabilityInterval  >= duration && availabilityInterval != 1) {
       TimeRange tr = TimeRange.fromStartDuration(busyTimes.length - availabilityInterval, availabilityInterval-1); 
       possibleTimes.add(tr);
     }
@@ -83,29 +83,29 @@ public final class FindMeetingQuery {
     boolean[] busyTimesOptionalAttendees = new boolean[MINUTES_IN_A_DAY+1];
 
     // Meeting is longer than a day, that can't happen
-    if(request.getDuration() > MINUTES_IN_A_DAY){
+    if (request.getDuration() > MINUTES_IN_A_DAY) {
       return possibleTimes;
     }
 
     // No attendees on the request
-    if(request.getAttendees().size() == 0 && request.getOptionalAttendees().size() == 0){
+    if (request.getAttendees().size() == 0 && request.getOptionalAttendees().size() == 0){ 
       possibleTimes.add(TimeRange.WHOLE_DAY);
       return possibleTimes;
     }
 
     // Clean schedule, all day is free
-    if(events.isEmpty()){
+    if (events.isEmpty()) {
       possibleTimes.add(TimeRange.WHOLE_DAY);
       return possibleTimes;
     }
 
     // For each event check if there is a conflict with the requested attendees. (N*M)
-    for(Event event : events){
+    for (Event event : events) {
       // If a mandatory attendee is busy, the meeting can't happen, so time is blocked out on both arrays.
-      if(!Collections.disjoint(event.getAttendees(), request.getAttendees())){
+      if (!Collections.disjoint(event.getAttendees(), request.getAttendees())) {
         Arrays.fill(busyTimesMandatoryAttendees, event.getWhen().start(), event.getWhen().end(), true); 
         Arrays.fill(busyTimesOptionalAttendees, event.getWhen().start(), event.getWhen().end(), true); 
-      }else if(!Collections.disjoint(event.getAttendees(), request.getOptionalAttendees())){ 
+      } else if (!Collections.disjoint(event.getAttendees(), request.getOptionalAttendees())) { 
         // If an optional attendee is busy, only the optional attendee schedule is blocked.
         Arrays.fill(busyTimesOptionalAttendees, event.getWhen().start(), event.getWhen().end(), true); 
       }
@@ -113,7 +113,7 @@ public final class FindMeetingQuery {
 
     // If including the optionals doesn't yield any TimeRanges, do not include them.
     possibleTimes = findTimeRanges(busyTimesOptionalAttendees, request.getDuration());
-    if(possibleTimes.size() == 0){
+    if (possibleTimes.size() == 0) {
       return findTimeRanges(busyTimesMandatoryAttendees, request.getDuration());
     }
     return possibleTimes;

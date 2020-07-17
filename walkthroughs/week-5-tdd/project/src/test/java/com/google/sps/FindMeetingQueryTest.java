@@ -342,7 +342,7 @@ public final class FindMeetingQueryTest {
     // Have one mandatory person, but make it so that there is just enough room at one point in the day to
     // have the meeting. With an additional optional attendee that will be ignored.
     //
-    // Optional  :     |-C-|
+    // Optional  :     |-B-|
     // Events  : |--A--|     |----A----|
     // Day     : |---------------------|
     // Options :       |-----| (ignoring the optional attendee)
