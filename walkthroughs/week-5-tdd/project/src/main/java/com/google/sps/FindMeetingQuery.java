@@ -70,9 +70,9 @@ public final class FindMeetingQuery {
    * Returns {@code TimeRange} when a meeting can happen based on other events and the
    * meeting participants involved.
    * Runtime: O(N*M) -> The runtime of {@code query} will be proportional to the amount of 
-   * events and attendees. This is seen when calling {@code Collections.disjoint} because it 
-   * is called once for the mandatory attendees and once for the optional attendees and each time 
-   * (events*possible attendees) 
+   * events (N) and attendees (M). This is seen when calling {@code Collections.disjoint} because it 
+   * is called once for the mandatory attendees and once for the optional attendees and
+   * that happens for every event.
    * @param events {@code Collection} of events happening.
    * @param request {@code MeetingRequest} for a meeting
    * @return Collection of {@code TimeRange} when a meeting can happen. 
