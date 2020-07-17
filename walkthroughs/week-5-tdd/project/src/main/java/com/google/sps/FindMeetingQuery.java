@@ -41,12 +41,16 @@ public final class FindMeetingQuery {
       }
     }
 
+    if(availabilityInterval == 1441){
+      possibleTimes.add(TimeRange.WHOLE_DAY);
+      return possibleTimes;
+    }
+
     // Adds the time available towards the EoD
     if(busyTimes.length - availabilityInterval  >= request.getDuration() && availabilityInterval != 1){
       TimeRange tr = TimeRange.fromStartDuration(busyTimes.length - availabilityInterval, availabilityInterval-1); 
       possibleTimes.add(tr);
     }
-
     return possibleTimes;
   }
 
@@ -100,7 +104,6 @@ public final class FindMeetingQuery {
       possibleTimes.add(TimeRange.WHOLE_DAY);
       return possibleTimes;
     }
-
     possibleTimes = findTimeRanges(busyTimesOptionalAttendees, request);
     if(possibleTimes.size() == 0){
       return findTimeRanges(busyTimesMandatoryAttendees, request);
